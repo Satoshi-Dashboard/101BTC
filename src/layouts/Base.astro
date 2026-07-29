@@ -1,0 +1,58 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  /** Optional JSON-LD object (or array) injected as application/ld+json */
+  jsonld?: unknown;
+}
+
+const {
+  title = '101 BTC — Bitcoin explicado para humanos',
+  description = 'Curso 101 BTC: Bitcoin explicado para humanos. Sin experiencia previa ni conocimientos técnicos. +500 alumnos ya dieron su primer paso.',
+  jsonld,
+} = Astro.props;
+
+const ogImage = '/img/hero-bg.png';
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImage} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {
+      jsonld && (
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(jsonld)}
+        />
+      )
+    }
+  </head>
+  <body>
+    <slot />
+
+    <script>
+      import '../lib/reveal.ts';
+    </script>
+  </body>
+</html>

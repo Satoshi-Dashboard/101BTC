@@ -1,0 +1,304 @@
+---
+// Modal global de captura de leads. Se superpone: no altera el layout existente.
+import { COPY, PAISES } from '../lib/leads/config';
+---
+
+<div
+  id="lead-modal"
+  class="lead-modal invisible fixed inset-0 z-[100] opacity-0"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="lead-modal-titulo"
+  aria-hidden="true"
+>
+  <div
+    class="absolute inset-0 bg-black/70 backdrop-blur-[2px]"
+    style="backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);"
+    data-lead-close
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="absolute inset-0 flex items-start justify-center overflow-y-auto p-4 py-8 sm:items-center">
+    <div
+      class="lead-modal__panel relative my-auto w-full max-w-[464px] rounded-xl border border-border bg-dark p-6 shadow-[0_24px_80px_rgba(0,0,0,0.6)] sm:p-8"
+    >
+      <button
+        type="button"
+        data-lead-close
+        aria-label="Cerrar"
+        class="absolute right-3 top-3 flex h-11 w-11 items-center justify-center rounded-md text-muted transition-colors duration-300 hover:bg-white/5 hover:text-bitcoin focus-visible:text-bitcoin"
+        style="transition-timing-function:var(--ease);"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+
+      <!-- Estado formulario -->
+      <div data-lead-vista="formulario">
+        <h2
+          id="lead-modal-titulo"
+          class="max-w-[320px] font-sans font-bold text-title"
+          style="font-size:clamp(1.5rem,4vw,2rem);line-height:1.15;"
+        >
+          {COPY.titulo}
+        </h2>
+        <p class="mt-3 font-sans text-sm leading-6 text-muted">
+          {COPY.subtitulo}
+        </p>
+
+        <form id="lead-form" class="mt-6 flex flex-col gap-4" novalidate>
+          <input type="hidden" name="cta_origen" data-lead-cta value="cta_general" />
+
+          <div class="flex flex-col gap-2">
+            <label for="lead-nombre" class="font-sans text-sm font-semibold text-title">
+              {COPY.labelNombre}
+            </label>
+            <input
+              id="lead-nombre"
+              name="nombre"
+              type="text"
+              autocomplete="name"
+              inputmode="text"
+              maxlength="100"
+              placeholder={COPY.phNombre}
+              class="lead-input"
+              aria-describedby="lead-nombre-error"
+            />
+            <p
+              id="lead-nombre-error"
+              data-lead-error="nombre"
+              class="hidden font-sans text-xs text-blue"
+              role="alert"
+            >
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="lead-pais" class="font-sans text-sm font-semibold text-title">
+              {COPY.labelPais}
+            </label>
+            <select
+              id="lead-pais"
+              name="pais"
+              class="lead-input lead-select"
+              aria-describedby="lead-pais-error"
+            >
+              <option value="">{COPY.phPais}</option>
+              {
+                PAISES.map((p) => (
+                  <option value={p.nombre} data-codigo={p.codigo}>
+                    {p.nombre}
+                    {p.codigo ? ` (${p.codigo})` : ''}
+                  </option>
+                ))
+              }
+            </select>
+            <p
+              id="lead-pais-error"
+              data-lead-error="pais"
+              class="hidden font-sans text-xs text-blue"
+              role="alert"
+            >
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="lead-telefono" class="font-sans text-sm font-semibold text-title">
+              {COPY.labelTelefono}
+            </label>
+            <input
+              id="lead-telefono"
+              name="telefono"
+              type="tel"
+              autocomplete="tel"
+              inputmode="tel"
+              maxlength="20"
+              placeholder={COPY.phTelefono}
+              class="lead-input"
+              aria-describedby="lead-telefono-error"
+            />
+            <p
+              id="lead-telefono-error"
+              data-lead-error="telefono"
+              class="hidden font-sans text-xs text-blue"
+              role="alert"
+            >
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="lead-correo" class="font-sans text-sm font-semibold text-title">
+              {COPY.labelCorreo}
+            </label>
+            <input
+              id="lead-correo"
+              name="correo"
+              type="email"
+              autocomplete="email"
+              inputmode="email"
+              maxlength="254"
+              placeholder={COPY.phCorreo}
+              class="lead-input"
+              aria-describedby="lead-correo-error"
+            />
+            <p
+              id="lead-correo-error"
+              data-lead-error="correo"
+              class="hidden font-sans text-xs text-blue"
+              role="alert"
+            >
+            </p>
+          </div>
+
+          <p
+            data-lead-error="general"
+            class="hidden rounded-md border border-blue/40 bg-blue/10 px-4 py-3 font-sans text-sm text-muted-light"
+            role="alert"
+          >
+          </p>
+
+          <button
+            type="submit"
+            data-lead-submit
+            class="mt-2 inline-flex min-h-[48px] w-full items-center justify-center gap-3 rounded-lg bg-bitcoin px-6 py-4 font-sans text-base font-bold text-dark transition-all duration-300 hover:-translate-y-0.5 hover:brightness-110 disabled:pointer-events-none disabled:opacity-60"
+            style="transition-timing-function:var(--ease);"
+          >
+            <span data-lead-spinner class="lead-spinner hidden" aria-hidden="true"></span>
+            <span data-lead-submit-label>{COPY.boton}</span>
+          </button>
+
+          <p class="text-center font-sans text-xs leading-5 text-muted">
+            {COPY.confianza}
+          </p>
+        </form>
+      </div>
+
+      <!-- Estado éxito / recurrente -->
+      <div data-lead-vista="salida" class="hidden py-6 text-center" role="status" aria-live="polite">
+        <span class="lead-spinner lead-spinner--grande mx-auto mb-5 block" aria-hidden="true"></span>
+        <p
+          data-lead-salida-texto
+          class="font-sans font-bold text-title"
+          style="font-size:clamp(1.125rem,3vw,1.25rem);line-height:1.3;"
+        >
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Entrada: fade + slide up. Salida: fade out. */
+  .lead-modal {
+    transition:
+      opacity 0.28s var(--ease),
+      visibility 0.28s var(--ease);
+  }
+  .lead-modal__panel {
+    transform: translateY(16px) scale(0.98);
+    opacity: 0;
+    transition:
+      transform 0.32s var(--ease),
+      opacity 0.32s var(--ease);
+    will-change: transform, opacity;
+  }
+  .lead-modal.is-open {
+    visibility: visible;
+    opacity: 1;
+  }
+  .lead-modal.is-open .lead-modal__panel {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  .lead-input {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: rgba(17, 17, 17, 0.9);
+    color: var(--title);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    transition:
+      border-color 0.25s var(--ease),
+      box-shadow 0.25s var(--ease);
+  }
+  .lead-input::placeholder {
+    color: var(--muted);
+  }
+  .lead-input:focus {
+    outline: none;
+    border-color: var(--bitcoin);
+    box-shadow: 0 0 0 3px rgba(247, 147, 26, 0.18);
+  }
+  .lead-input[aria-invalid='true'] {
+    border-color: var(--blue);
+  }
+
+  /* Flecha propia para el select (el nativo hereda mal en fondos oscuros). */
+  .lead-select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 2.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%238b8a88' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+  }
+  .lead-select option {
+    background: var(--dark);
+    color: var(--title);
+  }
+
+  .lead-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 9999px;
+    animation: lead-spin 0.7s linear infinite;
+  }
+  .lead-spinner--grande {
+    width: 32px;
+    height: 32px;
+    border-width: 3px;
+    color: var(--bitcoin);
+  }
+  @keyframes lead-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lead-modal,
+    .lead-modal__panel {
+      transition: none;
+    }
+    .lead-modal__panel {
+      transform: none;
+    }
+    .lead-spinner {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import '../lib/leads/controlador';
+</script>

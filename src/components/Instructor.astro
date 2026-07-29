@@ -1,0 +1,102 @@
+---
+import Section from './Section.astro';
+import Reveal from './Reveal.astro';
+---
+
+<Section id="instructor" class="bg-bg py-16 sm:py-20 md:py-28">
+  <Reveal>
+    <h2
+      class="text-center font-sans font-bold text-title leading-[1.1] mb-10 sm:mb-14 md:mb-16"
+      style="font-size:clamp(2rem,5vw,3rem);"
+    >
+      Tu Instructor
+    </h2>
+  </Reveal>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
+    <!-- Texto -->
+    <Reveal class="order-2 md:order-1">
+      <div class="flex flex-col gap-5">
+        <div class="flex items-center gap-3">
+          <a
+            href="https://www.linkedin.com/in/ikhunsa/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn de Luis Leon"
+            class="transition-colors duration-300 hover:text-bitcoin"
+          >
+            <p class="font-sans font-bold text-title leading-[1.1]" style="font-size:clamp(2rem,5vw,3rem);">
+              Luis Leon
+            </p>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/ikhunsa/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn de Luis Leon"
+            class="text-muted transition-colors duration-300 hover:text-bitcoin"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.446-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.114 20.452H3.56V9h3.554v11.452z"
+              />
+            </svg>
+          </a>
+        </div>
+
+        <p class="font-sans text-bitcoin text-base leading-6">
+          Empecé exactamente donde tú estás ahora
+        </p>
+
+        <div class="flex flex-col gap-[17px]">
+          <p class="font-sans text-muted text-base leading-6">
+            Hace más de 5 años no entendía nada de Bitcoin. Ni siquiera sabía
+            qué era una wallet. Me tomó años de estudio, errores, y horas
+            leyendo cosas que nadie me explicaba de forma simple, para
+            finalmente entender cómo funciona el dinero de verdad.
+          </p>
+          <p class="font-sans text-muted text-base leading-6">
+            101 BTC es el curso que yo hubiera necesitado cuando empecé. Cada
+            módulo existe porque en algún momento yo mismo me hice esa pregunta
+            y no encontré una respuesta clara.
+          </p>
+        </div>
+
+        <blockquote
+          class="border-l-8 border-bitcoin pl-5 font-sans font-semibold italic text-muted text-base leading-6"
+        >
+          "No te voy a prometer que te harás rico. Te voy a enseñar a que el
+          fruto de tu trabajo deje de esfumarse. Bitcoin no promete nada, y por
+          eso lo cumple todo."
+        </blockquote>
+      </div>
+    </Reveal>
+
+    <!-- Foto -->
+    <Reveal delay={120} class="order-1 md:order-2">
+      <a
+        href="https://www.linkedin.com/in/ikhunsa/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn de Luis Leon"
+        class="block"
+      >
+        <img
+          src="/img/instructor.png"
+          alt="Luis Leon, instructor de 101 BTC"
+          width="543"
+          height="674"
+          loading="lazy"
+          decoding="async"
+          class="w-full h-auto rounded-card object-cover"
+        />
+      </a>
+    </Reveal>
+  </div>
+</Section>

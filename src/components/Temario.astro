@@ -1,0 +1,104 @@
+---
+import Section from './Section.astro';
+import Reveal from './Reveal.astro';
+import Accordion from './Accordion.astro';
+import type { AccordionItem } from './Accordion.astro';
+
+// Contenido literal del temario completo (temario_btc_101.md). No inventar texto.
+const items: AccordionItem[] = [
+  {
+    q: 'Nociones previas sobre el dinero',
+    body:
+      'Clase 1. Llegó el momento de hablar sobre el dinero\n' +
+      'Clase 2. Definiendo el dinero\n' +
+      'Clase 3. La transacción como unidad básica de la economía\n' +
+      'Clase 4. Origen del dinero y el caso de la Isla de Yap\n' +
+      'Clase 5. El oro y su función monetaria',
+  },
+  {
+    q: 'Historia del dinero fiduciario',
+    body:
+      'Clase 6. Monedas y manipulaciones: la dilución a lo largo de la historia\n' +
+      'Clase 7. El patrón oro y las guerras mundiales\n' +
+      'Clase 8. 1971: el fin del patrón dólar oro\n' +
+      'Clase 9. Inflación: el impuesto invisible',
+  },
+  {
+    q: 'La máquina de la economía',
+    body:
+      'Clase 10. El crédito: la pieza más importante y menos comprendida\n' +
+      'Clase 11. Los ciclos de deuda\n' +
+      'Clase 12. El desapalancamiento y las cuatro palancas',
+  },
+  {
+    q: 'Nace Bitcoin',
+    body:
+      'Clase 13. Crisis de 2008 y surgimiento de Bitcoin\n' +
+      'Clase 14. El problema del dinero digital: el doble gasto\n' +
+      'Clase 15. Qué es Bitcoin: una palabra, tres usos\n' +
+      'Clase 16. Principios fundamentales de Bitcoin',
+  },
+  {
+    q: 'Cómo funciona Bitcoin por dentro',
+    body:
+      'Clase 17. Red, nodos y blockchain\n' +
+      'Clase 18. Minería y prueba de trabajo\n' +
+      'Clase 19. Transacciones, UTXO y mempool',
+  },
+  {
+    q: 'Wallets, claves y custodia',
+    body:
+      'Clase 20. Una cartera es un gestor de llaves\n' +
+      'Clase 21. La frase semilla: respaldo maestro\n' +
+      'Clase 22. Custodia vs. autocustodia\n' +
+      'Clase 23. Seguridad práctica: simple gana',
+  },
+  {
+    q: 'Amenazas, estafas y errores frecuentes',
+    body:
+      'Clase 24. Formas más comunes de perder bitcoins\n' +
+      'Clase 25. Estafas comunes y señales rojas\n' +
+      'Clase 26. Reglas de oro y protocolo si algo huele mal',
+  },
+  {
+    q: 'Uso práctico y responsable',
+    body:
+      'Clase 27. Comprar, recibir y enviar\n' +
+      'Clase 28. Privacidad: seudónimo, no anónimo\n' +
+      'Clase 29. Lightning Network: vista rápida',
+  },
+  {
+    q: 'Comparativas, filosofía y pensamiento crítico',
+    body:
+      'Clase 30. Bitcoin vs. Oro y Bitcoin vs. CBDC\n' +
+      'Clase 31. El caso moral: Bitcoin y la libertad individual\n' +
+      'Clase 32. Riesgos, mitos y pensamiento crítico',
+  },
+  {
+    q: 'Cierre y ruta de aprendizaje',
+    body:
+      'Clase 33. Tu política personal de Bitcoin y plan de 30 días\n' +
+      'Clase 34. Recapitulación y recursos para seguir',
+  },
+];
+---
+
+<Section id="temario" class="bg-bg py-16 md:py-24 lg:py-28">
+  <div class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
+    <!-- Columna izquierda: título -->
+    <div class="lg:sticky lg:top-24 lg:self-start">
+      <Reveal>
+        <h2 class="font-sans font-bold text-title" style="font-size:clamp(2rem,5vw,3rem);line-height:1.15;">
+          Todo lo que vas a aprender
+        </h2>
+      </Reveal>
+    </div>
+
+    <!-- Columna derecha: acordeón -->
+    <div>
+      <Reveal delay={80}>
+        <Accordion items={items} single />
+      </Reveal>
+    </div>
+  </div>
+</Section>

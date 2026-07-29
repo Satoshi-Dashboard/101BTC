@@ -1,0 +1,21 @@
+{
+  "name": "web-101-btc",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/tailwind": "^5.1.5",
+    "@fontsource/instrument-serif": "^5.1.0",
+    "@fontsource/plus-jakarta-sans": "^5.1.0",
+    "@fontsource/silkscreen": "^5.1.0",
+    "@supabase/supabase-js": "^2.111.0",
+    "astro": "^5.2.0",
+    "tailwindcss": "^3.4.17"
+  }
+}

@@ -1,0 +1,17 @@
+---
+export interface Props {
+  /** stagger delay in ms -> data-reveal-delay */
+  delay?: number;
+  class?: string;
+  as?: string;
+}
+
+const { delay, class: extraClass = '' } = Astro.props;
+---
+
+<div
+  class={`reveal ${extraClass}`}
+  data-reveal-delay={delay != null ? String(delay) : undefined}
+>
+  <slot />
+</div>

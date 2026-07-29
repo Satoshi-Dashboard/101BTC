@@ -1,0 +1,203 @@
+---
+import Section from './Section.astro';
+import Reveal from './Reveal.astro';
+import { mensajePara } from '../lib/leads/config';
+
+/* Feature check icon (feather inline) rendered with color via currentColor */
+const plans = [
+  {
+    key: 'basico',
+    ctaId: 'plan_basico',
+    name: 'BÁSICO',
+    price: '$47',
+    unit: '/Pago único',
+    accent: 'bitcoin',
+    cardClass: 'border border-border-card',
+    checkClass: 'text-bitcoin',
+    featureText: 'text-title',
+    btnClass:
+      'border-2 border-bitcoin text-bitcoin hover:bg-bitcoin/10',
+    badge: null,
+    sub: null,
+    features: [
+      '10 módulos',
+      '34 clases',
+      'Acceso de por vida',
+      'Comunidad privada',
+      'Actualizaciones',
+    ],
+  },
+  {
+    key: 'completo',
+    ctaId: 'plan_completo',
+    name: 'COMPLETO',
+    price: '$77',
+    unit: '/Pago único',
+    accent: 'bitcoin',
+    cardClass: 'border-2 border-bitcoin',
+    checkClass: 'text-bitcoin',
+    featureText: 'text-title',
+    btnClass: 'bg-bitcoin text-dark hover:brightness-110',
+    badge: { label: 'Popular', bg: 'bg-bitcoin', text: 'text-dark' },
+    sub: null,
+    features: [
+      'Todo lo del plan básico',
+      'Asesoría 30 min/mes (primeros 6 meses)',
+      'Asesoría modalidad virtual',
+      'Acompañamiento directo conmigo',
+    ],
+  },
+  {
+    key: 'mentor',
+    ctaId: 'plan_mentor',
+    name: 'MENTOR 1 a 1',
+    price: '$500',
+    unit: '/Pago único',
+    accent: 'blue',
+    cardClass: 'border-2 border-blue',
+    checkClass: 'text-blue',
+    featureText: 'text-white',
+    btnClass: 'bg-blue text-white hover:brightness-110',
+    badge: { label: 'Oferta limitada', bg: 'bg-blue', text: 'text-white' },
+    sub: 'Válido 1 año',
+    features: [
+      'Todo lo del plan Completo',
+      '1 hora de asesoría personalizada al mes durante 12 meses',
+      'Casos urgentes o problemáticas puntuales sin costo adicional',
+      'Modalidad virtual o presencial, según tu ubicación geográfica',
+    ],
+  },
+];
+---
+
+<Section
+  id="precio"
+  class="relative isolate overflow-hidden py-20 md:py-28"
+>
+  {/* Background image */}
+  <div class="pointer-events-none absolute inset-0 -z-30" aria-hidden="true">
+    <img
+      src="/img/mountain.png"
+      alt=""
+      loading="lazy"
+      decoding="async"
+      class="h-full w-full object-cover"
+    />
+  </div>
+  {/* Bitcoin color overlay (mix-blend-color) */}
+  <div
+    class="pointer-events-none absolute inset-0 -z-20 mix-blend-color bg-bitcoin"
+    aria-hidden="true"
+  >
+  </div>
+  {/* Top + bottom gradients to bg */}
+  <div
+    class="pointer-events-none absolute inset-0 -z-10"
+    style="background:linear-gradient(180deg,var(--bg) 0%,rgba(17,17,17,0) 28%,rgba(17,17,17,0) 72%,var(--bg) 100%);"
+    aria-hidden="true"
+  >
+  </div>
+
+  <div class="relative">
+    <Reveal class="mx-auto max-w-[720px] text-center">
+      <h2
+        class="font-sans font-bold text-title leading-[1.1]"
+        style="font-size:clamp(2rem,5vw,3rem);"
+      >
+        Elige tu <span class="text-bitcoin">acceso</span>
+      </h2>
+    </Reveal>
+
+    <div
+      class="mt-12 flex flex-col items-center justify-center gap-8 md:mt-16 lg:flex-row lg:items-stretch lg:gap-6 xl:gap-10"
+    >
+      {
+        plans.map((plan, i) => (
+          <Reveal delay={i * 120} class="w-full max-w-[288px]">
+            <article
+              class={`relative flex h-full flex-col overflow-hidden rounded-md bg-bg-card backdrop-blur-sm ${plan.cardClass}`}
+            >
+              {plan.badge && (
+                <div
+                  class={`flex w-full items-center justify-center gap-2 px-4 py-2 text-sm font-bold ${plan.badge.bg} ${plan.badge.text}`}
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
+                  </svg>
+                  <span>{plan.badge.label}</span>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
+                  </svg>
+                </div>
+              )}
+
+              <div class="flex flex-1 flex-col p-6">
+                {/* Header */}
+                <h3 class="text-xl font-bold text-title">{plan.name}</h3>
+                <div class="mt-3 flex flex-wrap items-baseline gap-x-2">
+                  <span class="text-[2rem] leading-none font-bold text-title">
+                    {plan.price}
+                  </span>
+                  <span class="text-xs font-normal text-muted">
+                    {plan.unit}
+                  </span>
+                </div>
+                {plan.sub && (
+                  <p class="mt-2 text-xs text-title">{plan.sub}</p>
+                )}
+
+                {/* Features */}
+                <ul class="mt-6 flex flex-1 flex-col gap-4">
+                  {plan.features.map((f) => (
+                    <li class="flex items-start gap-4">
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class={`mt-0.5 shrink-0 ${plan.checkClass}`}
+                        aria-hidden="true"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                      <span class={`text-sm leading-snug font-normal ${plan.featureText}`}>
+                        {f}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA */}
+                <a
+                  href="#precio"
+                  data-cta-id={plan.ctaId}
+                  data-whatsapp-message={mensajePara(plan.ctaId)}
+                  class={`mt-8 inline-flex min-h-[44px] w-full items-center justify-center rounded-sm px-5 py-3 text-base font-semibold transition-all duration-300 hover:-translate-y-0.5 ${plan.btnClass}`}
+                  style="transition-timing-function:var(--ease);"
+                >
+                  Quiero mi acceso
+                </a>
+              </div>
+            </article>
+          </Reveal>
+        ))
+      }
+    </div>
+  </div>
+</Section>

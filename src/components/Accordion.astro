@@ -1,0 +1,179 @@
+---
+export interface AccordionItem {
+  q: string;
+  body?: string;
+  open?: boolean;
+}
+
+export interface Props {
+  items: AccordionItem[];
+  /** only one panel open at a time */
+  single?: boolean;
+  class?: string;
+}
+
+const { items, single = true, class: extraClass = '' } = Astro.props;
+
+// Unique id per accordion instance to avoid collisions across sections.
+const uid = 'acc-' + Math.random().toString(36).slice(2, 9);
+---
+
+<div
+  class={`accordion w-full ${extraClass}`}
+  data-single={single ? 'true' : 'false'}
+>
+  {
+    items.map((item, i) => {
+      const btnId = `${uid}-btn-${i}`;
+      const panelId = `${uid}-panel-${i}`;
+      const isOpen = !!item.open;
+      return (
+        <div class="accordion__item border-b border-border">
+          <h3 class="m-0">
+            <button
+              id={btnId}
+              type="button"
+              class="accordion__trigger flex w-full items-center justify-between gap-4 py-6 text-left text-2xl font-medium text-title"
+              aria-expanded={isOpen ? 'true' : 'false'}
+              aria-controls={panelId}
+              style="min-height:44px;"
+            >
+              <span class="pr-2">{item.q}</span>
+              <svg
+                class="accordion__chevron shrink-0 transition-transform duration-300 text-bitcoin"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                style={`transition-timing-function:var(--ease);transform:rotate(${isOpen ? '180deg' : '0deg'});`}
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+          </h3>
+          <div
+            id={panelId}
+            class="accordion__panel overflow-hidden"
+            role="region"
+            aria-labelledby={btnId}
+            style={`max-height:0px;transition:max-height .4s var(--ease);`}
+          >
+            {item.body && (
+              <div
+                class="accordion__inner pb-6 pr-8 text-base leading-6 text-muted"
+                set:html={item.body.replace(/\n/g, '<br/>')}
+              />
+            )}
+          </div>
+        </div>
+      );
+    })
+  }
+</div>
+
+<script>
+  function setupAccordions() {
+    const accordions =
+      document.querySelectorAll<HTMLElement>('.accordion');
+
+    accordions.forEach((acc) => {
+      if (acc.dataset.bound === 'true') return;
+      acc.dataset.bound = 'true';
+
+      const single = acc.dataset.single === 'true';
+      const items = Array.from(
+        acc.querySelectorAll<HTMLElement>('.accordion__item')
+      );
+
+      const setOpen = (item: HTMLElement, open: boolean) => {
+        const btn = item.querySelector<HTMLButtonElement>(
+          '.accordion__trigger'
+        );
+        const panel = item.querySelector<HTMLElement>('.accordion__panel');
+        const chevron = item.querySelector<HTMLElement>(
+          '.accordion__chevron'
+        );
+        if (!btn || !panel) return;
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (chevron) {
+          chevron.style.transform = open
+            ? 'rotate(180deg)'
+            : 'rotate(0deg)';
+        }
+        if (open) {
+          panel.style.maxHeight = panel.scrollHeight + 'px';
+        } else {
+          panel.style.maxHeight = '0px';
+        }
+      };
+
+      // Initialise: any item pre-marked open (aria-expanded=true) gets height.
+      items.forEach((item) => {
+        const btn = item.querySelector<HTMLButtonElement>(
+          '.accordion__trigger'
+        );
+        const isOpen = btn?.getAttribute('aria-expanded') === 'true';
+        // apply after layout so scrollHeight is accurate
+        requestAnimationFrame(() => setOpen(item, !!isOpen));
+      });
+
+      items.forEach((item) => {
+        const btn = item.querySelector<HTMLButtonElement>(
+          '.accordion__trigger'
+        );
+        if (!btn) return;
+
+        const toggle = () => {
+          const open = btn.getAttribute('aria-expanded') === 'true';
+          if (!open && single) {
+            items.forEach((other) => {
+              if (other !== item) setOpen(other, false);
+            });
+          }
+          setOpen(item, !open);
+        };
+
+        btn.addEventListener('click', toggle);
+        btn.addEventListener('keydown', (e: KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggle();
+          }
+        });
+      });
+
+      // Recompute open panel heights on resize (avoids clipping).
+      let raf = 0;
+      window.addEventListener('resize', () => {
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          items.forEach((item) => {
+            const btn = item.querySelector<HTMLButtonElement>(
+              '.accordion__trigger'
+            );
+            const panel = item.querySelector<HTMLElement>(
+              '.accordion__panel'
+            );
+            if (
+              btn?.getAttribute('aria-expanded') === 'true' &&
+              panel
+            ) {
+              panel.style.maxHeight = panel.scrollHeight + 'px';
+            }
+          });
+        });
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupAccordions);
+  } else {
+    setupAccordions();
+  }
+</script>

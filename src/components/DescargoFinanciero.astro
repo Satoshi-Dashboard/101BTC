@@ -1,0 +1,153 @@
+---
+// Descargo de responsabilidad financiera. Bloque reutilizado en las 3
+// páginas legales para que el aviso aparezca en todo documento relevante.
+export interface Props {
+  /** Nivel del encabezado según el documento donde se inserta */
+  level?: 2 | 3;
+  id?: string;
+  /** Numeración del apartado en el documento anfitrión, p. ej. '4. ' */
+  prefix?: string;
+}
+
+const { level = 2, id = 'descargo', prefix = '' } = Astro.props;
+const Tag = level === 2 ? 'h2' : 'h3';
+---
+
+<Tag id={id}>{prefix}Descargo de responsabilidad — esto NO es asesoría financiera</Tag>
+
+<div class="aviso">
+  <p>
+    <strong
+      >101 BTC es un curso educativo. No es asesoría financiera, de inversión,
+      fiscal, contable ni legal, y no debe interpretarse como tal bajo ninguna
+      circunstancia.</strong
+    >
+  </p>
+  <p>
+    El Titular no es asesor financiero registrado, corredor de valores, gestor
+    de patrimonios, agente fiscal ni abogado, y no está autorizado ni pretende
+    actuar como ninguno de ellos. Ningún contenido del curso, de este sitio, de
+    sus canales, correos, comunidades o comunicaciones privadas constituye una
+    recomendación personalizada de compra, venta, tenencia o disposición de
+    bitcoin, criptoactivos, valores ni ningún otro activo.
+  </p>
+</div>
+
+<h3>Ausencia de recomendación y de relación de asesoría</h3>
+<p>
+  Todo el material se entrega con fines exclusivamente informativos,
+  educativos e ilustrativos, de carácter general, sin considerar tu situación
+  financiera, tus objetivos, tu tolerancia al riesgo, tu perfil fiscal ni tu
+  marco regulatorio local. Nada de lo aquí expuesto crea una relación de
+  asesoría, fiduciaria, de mandato ni de representación entre tú y el Titular.
+  Los ejemplos, cifras, gráficos, escenarios históricos y casos de estudio son
+  didácticos, no proyecciones ni promesas.
+</p>
+
+<h3>Riesgo del activo</h3>
+<ul>
+  <li>
+    Bitcoin y los criptoactivos son <strong>altamente volátiles</strong> y
+    pueden perder la totalidad de su valor.
+  </li>
+  <li>
+    El rendimiento pasado <strong>no</strong> anticipa resultados futuros.
+  </li>
+  <li>
+    Las operaciones son, por diseño, <strong>irreversibles</strong>: un envío a
+    una dirección equivocada, una clave privada perdida o una frase semilla
+    comprometida implican pérdida definitiva e irrecuperable de fondos.
+  </li>
+  <li>
+    No existe garantía de depósitos, seguro, reversión de cargos ni entidad de
+    respaldo que devuelva fondos perdidos, robados o mal enviados.
+  </li>
+  <li>
+    Terceros ajenos al Titular (exchanges, monederos, custodios, mineros,
+    proveedores de software o hardware) pueden fallar, ser hackeados,
+    congelar cuentas o desaparecer.
+  </li>
+  <li>
+    El tratamiento legal y fiscal de los criptoactivos varía por país y cambia
+    con frecuencia; verificar tu situación es tu responsabilidad.
+  </li>
+</ul>
+
+<h3>Decisiones propias y exención de responsabilidad</h3>
+<div class="aviso">
+  <p>
+    <strong
+      >Tú, y únicamente tú, eres responsable de tus decisiones financieras,
+      operativas, fiscales y legales.</strong
+    >
+  </p>
+  <p>
+    Al acceder al curso o a este sitio aceptas de forma expresa que actúas por
+    tu propia cuenta, riesgo y criterio, tras tu propia investigación
+    independiente y, cuando corresponda, tras consultar a un profesional
+    debidamente licenciado en tu jurisdicción.
+  </p>
+  <p>
+    En la máxima medida permitida por la ley aplicable, el Titular, sus
+    colaboradores, instructores, proveedores y afiliados <strong
+      >no asumen ninguna responsabilidad</strong
+    > por pérdidas o daños de cualquier naturaleza —directos, indirectos,
+    incidentales, especiales, punitivos, consecuenciales, pérdida de capital,
+    de fondos, de claves, de oportunidad, de beneficios o de datos— derivados
+    de o relacionados con:
+  </p>
+  <ul>
+    <li>decisiones de compra, venta, tenencia, custodia o traspaso de activos;</li>
+    <li>
+      pérdida, robo, extravío u olvido de claves privadas, frases semilla,
+      contraseñas o dispositivos;
+    </li>
+    <li>
+      errores de operación propios: direcciones mal copiadas, redes
+      equivocadas, comisiones mal configuradas, transacciones no confirmadas;
+    </li>
+    <li>
+      estafas, fraudes, phishing, suplantaciones o ingeniería social sufridos
+      por el usuario, incluidas las cometidas por terceros que se hagan pasar
+      por el Titular o por el curso;
+    </li>
+    <li>
+      fallos, quiebras, bloqueos, hackeos o sanciones de exchanges, custodios,
+      bancos, monederos o cualquier tercero;
+    </li>
+    <li>
+      incumplimientos fiscales, aduaneros, cambiarios o regulatorios del
+      usuario en su jurisdicción;
+    </li>
+    <li>
+      interpretaciones, aplicaciones o extrapolaciones que el usuario haga del
+      material educativo.
+    </li>
+  </ul>
+  <p>
+    <strong
+      >Renuncias a presentar cualquier reclamación, demanda o acción contra el
+      Titular por resultados económicos adversos derivados de tus propias
+      decisiones.</strong
+    > Esta exención no pretende excluir responsabilidades que la ley aplicable
+    declare irrenunciables (por ejemplo, dolo o fraude comprobados).
+  </p>
+</div>
+
+<h3>Sin promesa de resultados</h3>
+<p>
+  El Titular <strong>no promete ni garantiza</strong> rentabilidad, ganancias,
+  ahorro, revalorización, ingresos, «libertad financiera» ni ningún resultado
+  económico derivado del curso. Tampoco garantiza que aplicando el contenido
+  evitarás pérdidas. El único compromiso del Titular es entregar el material
+  educativo descrito en la página del curso.
+</p>
+
+<h3>Nada de custodia</h3>
+<p>
+  El Titular <strong>nunca</strong> solicita, recibe, custodia ni administra
+  fondos, bitcoin, criptoactivos, claves privadas ni frases semilla de los
+  alumnos, y nunca lo hará. Jamás compartas tu frase semilla con nadie, ni con
+  personas que afirmen representar a 101 BTC. Cualquier mensaje que te pida
+  claves, semillas o transferencias es una estafa y es ajeno al Titular.
+</p>

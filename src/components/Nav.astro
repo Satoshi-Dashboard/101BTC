@@ -1,0 +1,379 @@
+---
+// Nav — pill flotante sticky top, centrado. Menú móvil hamburguesa.
+// bg rgba(0,0,0,.25) + backdrop-blur(2px), radius pill, padding 5px, gap 5px.
+const links = [
+  { label: 'Inicio', href: '#inicio', active: true },
+  { label: 'Problema', href: '#problema' },
+  { label: 'Temario', href: '#temario' },
+  { label: 'Instructor', href: '#instructor' },
+  { label: 'Precio', href: '#precio' },
+  { label: 'Preguntas', href: '#faq' },
+];
+---
+
+<nav
+  class="fixed inset-x-0 top-4 z-50 mx-auto flex w-full max-w-fit items-center justify-center px-4"
+  aria-label="Navegación principal"
+>
+  <div
+    class="flex items-center gap-[5px] rounded-pill border border-white/10 bg-black/25 p-[5px] backdrop-blur-[2px]"
+    style="backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);"
+  >
+    <!-- Enlaces (desktop) -->
+    <ul id="nav-list" class="relative hidden items-center gap-[5px] lg:flex">
+      <!-- Pastilla deslizante única (hover + click-lock + scroll-spy) -->
+      <span id="nav-pill" class="nav-pill" aria-hidden="true"></span>
+      {
+        links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              data-nav-item
+              data-target={l.href}
+              aria-current={l.active ? 'page' : undefined}
+              class={
+                'relative z-10 flex min-h-[36px] items-center rounded-pill px-4 py-2 text-[12px] font-medium tracking-[0.24px] text-muted-light transition-colors duration-300 ' +
+                (l.active ? 'is-covered' : '')
+              }
+              style="transition-timing-function:var(--ease);"
+            >
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <!-- Indicador Live (desktop) -->
+    <a
+      href="https://www.satoshidashboard.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hidden min-h-[36px] items-center gap-2 rounded-pill px-4 py-2 lg:flex"
+      aria-label="SatoshiDashboard Live"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        stroke="none"
+        class="text-bitcoin"
+        aria-hidden="true"
+      >
+        <path d="M13 2L3 14h7l-1 8 10-12h-7z" />
+      </svg>
+      <span class="text-[12px] font-bold tracking-[0.24px] text-bitcoin"
+        >SatoshiDashboard Live</span
+      >
+      <span
+        class="nav-dot inline-block h-[7px] w-[7px] rounded-full bg-bitcoin"
+        aria-hidden="true"
+      ></span>
+    </a>
+
+    <!-- Botón hamburguesa (móvil) -->
+    <button
+      id="nav-toggle"
+      type="button"
+      class="flex h-11 w-11 items-center justify-center rounded-pill text-muted-light transition-colors duration-300 hover:bg-white/10 lg:hidden"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="nav-mobile"
+      style="transition-timing-function:var(--ease);"
+    >
+      <svg
+        id="nav-icon-open"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+      <svg
+        id="nav-icon-close"
+        class="hidden"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Overlay + menú móvil -->
+  <div
+    id="nav-mobile"
+    class="nav-mobile invisible fixed inset-0 z-40 opacity-0 lg:hidden"
+    aria-hidden="true"
+  >
+    <div
+      id="nav-backdrop"
+      class="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+      style="backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);"
+    >
+    </div>
+    <div
+      class="nav-mobile-panel absolute inset-x-4 top-20 origin-top rounded-card border border-border bg-dark/95 p-4 backdrop-blur-[2px]"
+    >
+      <ul class="flex flex-col gap-1">
+        {
+          links.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                aria-current={l.active ? 'page' : undefined}
+                data-nav-link
+                class={
+                  'flex min-h-[44px] items-center rounded-lg px-4 py-3 text-base tracking-[0.24px] transition-colors duration-300 ' +
+                  (l.active
+                    ? 'font-bold text-bitcoin'
+                    : 'font-medium text-muted-light hover:bg-white/10')
+                }
+                style="transition-timing-function:var(--ease);"
+              >
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+        <li class="mt-1 border-t border-border pt-2">
+          <a
+            href="https://www.satoshidashboard.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-nav-link
+            class="flex min-h-[44px] items-center gap-2 rounded-lg px-4 py-3"
+            aria-label="SatoshiDashboard Live"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              stroke="none"
+              class="text-bitcoin"
+              aria-hidden="true"
+            >
+              <path d="M13 2L3 14h7l-1 8 10-12h-7z" />
+            </svg>
+            <span class="text-base font-bold tracking-[0.24px] text-bitcoin"
+              >SatoshiDashboard Live</span
+            >
+            <span
+              class="nav-dot inline-block h-[7px] w-[7px] rounded-full bg-bitcoin"
+              aria-hidden="true"
+            ></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<style>
+  /* Pastilla deslizante del nav (desktop). GPU: transform + width. */
+  .nav-pill {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 36px;
+    width: 0;
+    transform: translate(0, -50%);
+    border: 1px solid var(--white);
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 9999px;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition:
+      transform 0.35s var(--ease),
+      width 0.35s var(--ease),
+      opacity 0.2s var(--ease);
+    will-change: transform, width;
+  }
+  .nav-pill.is-ready {
+    opacity: 1;
+  }
+  /* Item cuyo texto queda sobre la pastilla → oscuro y bold para contraste */
+  [data-nav-item].is-covered {
+    color: var(--invert, #2f2f2f);
+    font-weight: 700;
+  }
+
+  /* Punto pulsante del indicador Live (animación GPU: opacity/transform) */
+  .nav-dot {
+    animation: nav-pulse 1.8s var(--ease) infinite;
+    will-change: transform, opacity;
+  }
+  @keyframes nav-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(0.6);
+      opacity: 0.4;
+    }
+  }
+
+  /* Menú móvil: transición suave (opacity + escala del panel) */
+  .nav-mobile {
+    transition:
+      opacity 0.3s var(--ease),
+      visibility 0.3s var(--ease);
+  }
+  .nav-mobile-panel {
+    transform: translateY(-8px) scale(0.98);
+    opacity: 0;
+    transition:
+      transform 0.3s var(--ease),
+      opacity 0.3s var(--ease);
+    will-change: transform, opacity;
+  }
+  .nav-mobile.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  .nav-mobile.is-open .nav-mobile-panel {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-pill {
+      transition: opacity 0.2s;
+    }
+    .nav-dot {
+      animation: none;
+    }
+    .nav-mobile,
+    .nav-mobile-panel {
+      transition: none;
+    }
+    .nav-mobile-panel {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.getElementById('nav-toggle');
+  const menu = document.getElementById('nav-mobile');
+  const backdrop = document.getElementById('nav-backdrop');
+  const iconOpen = document.getElementById('nav-icon-open');
+  const iconClose = document.getElementById('nav-icon-close');
+  const links = document.querySelectorAll<HTMLElement>('[data-nav-link]');
+
+  function setMenu(open: boolean) {
+    if (!toggle || !menu) return;
+    menu.classList.toggle('is-open', open);
+    menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    iconOpen?.classList.toggle('hidden', open);
+    iconClose?.classList.toggle('hidden', !open);
+  }
+
+  toggle?.addEventListener('click', () => {
+    const open = menu?.classList.contains('is-open');
+    setMenu(!open);
+  });
+
+  backdrop?.addEventListener('click', () => setMenu(false));
+  links.forEach((l) => l.addEventListener('click', () => setMenu(false)));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setMenu(false);
+  });
+
+  // ── Pastilla deslizante (desktop): hover + click-lock + scroll-spy ──
+  const navList = document.getElementById('nav-list');
+  const pill = document.getElementById('nav-pill');
+  const items = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('#nav-list [data-nav-item]')
+  );
+
+  if (navList && pill && items.length) {
+    let activeEl: HTMLElement = items.find((i) => i.classList.contains('is-covered')) ?? items[0];
+    let isHovering = false;
+
+    const movePill = (el: HTMLElement) => {
+      pill.style.width = `${el.offsetWidth}px`;
+      pill.style.transform = `translate(${el.offsetLeft}px, -50%)`;
+      pill.classList.add('is-ready');
+      items.forEach((i) => {
+        const on = i === el;
+        i.classList.toggle('is-covered', on);
+        if (on) i.setAttribute('aria-current', 'page');
+        else i.removeAttribute('aria-current');
+      });
+    };
+
+    // Hover: seguir el mouse
+    items.forEach((item) => {
+      item.addEventListener('mouseenter', () => {
+        isHovering = true;
+        movePill(item);
+      });
+      // Click: bloquear selección en el item
+      item.addEventListener('click', () => {
+        activeEl = item;
+        movePill(item);
+      });
+    });
+    // Salir del nav → volver al activo
+    navList.addEventListener('mouseleave', () => {
+      isHovering = false;
+      movePill(activeEl);
+    });
+
+    // Scroll-spy: mover al item de la sección visible (si no hay hover)
+    const sections = items
+      .map((i) => document.querySelector(i.dataset.target ?? ''))
+      .filter((s): s is HTMLElement => !!s);
+
+    if (sections.length) {
+      const spy = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (!e.isIntersecting) continue;
+            const match = items.find((i) => i.dataset.target === `#${e.target.id}`);
+            if (!match) continue;
+            activeEl = match;
+            if (!isHovering) movePill(match);
+          }
+        },
+        { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+      );
+      sections.forEach((s) => spy.observe(s));
+    }
+
+    // Init + recálculo en resize
+    const init = () => movePill(activeEl);
+    if (document.readyState === 'complete') init();
+    else window.addEventListener('load', init);
+    let rAF = 0;
+    window.addEventListener('resize', () => {
+      cancelAnimationFrame(rAF);
+      rAF = requestAnimationFrame(() => movePill(activeEl));
+    });
+  }
+</script>

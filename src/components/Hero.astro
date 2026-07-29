@@ -1,0 +1,108 @@
+---
+import Reveal from './Reveal.astro';
+import { mensajePara } from '../lib/leads/config';
+---
+
+<section
+  id="inicio"
+  class="relative isolate flex min-h-screen w-full items-end overflow-hidden bg-bg"
+>
+  <!-- Capa 1: fondo normal (eager: above the fold) -->
+  <img
+    src="/img/hero-bg.png"
+    alt=""
+    aria-hidden="true"
+    fetchpriority="high"
+    decoding="async"
+    class="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover"
+  />
+  <!-- Capa 2: fondo hover (ojo ₿ naranja), fade por opacity -->
+  <img
+    src="/img/hero-bg-orange.png"
+    alt=""
+    aria-hidden="true"
+    loading="eager"
+    decoding="async"
+    class="hero-bg-hover pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover opacity-0 transition-opacity duration-500"
+    style="transition-timing-function:var(--ease);"
+  />
+  <!-- Capa 3: overlay gradiente a #111 -->
+  <div
+    class="pointer-events-none absolute inset-0 -z-10 bg-hero-overlay"
+    aria-hidden="true"
+  >
+  </div>
+
+  <!-- Contenido -->
+  <div
+    class="relative z-10 mx-auto w-full max-w-[1440px] px-5 py-24 sm:px-6 md:px-10 md:py-32 lg:px-16"
+  >
+    <Reveal class="w-full">
+      <div class="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
+        <!-- Title (left) -->
+        <h1 class="text-center font-serif text-display text-title md:text-left">
+          <span class="block font-display text-bitcoin">Bitcoin</span>
+          <span class="font-serif text-title">Explicado para humanos.</span>
+        </h1>
+
+        <!-- Body (right) -->
+        <div class="max-w-[486px] justify-self-center md:justify-self-start">
+          <p class="text-center font-sans text-body text-white md:text-left">
+            <b class="font-bold">+500</b> alumnos ya dieron su primer paso en Bitcoin.
+            Sin experiencia previa. Sin conocimientos técnicos. No se trata de curiosidad.
+            Se trata de entender las herramientas que la gente exitosa ya usa para construir
+            un futuro distinto al que le enseñaron a aceptar.
+          </p>
+
+          <div class="mt-8 flex justify-center md:justify-start">
+            <a
+              href="#temario"
+              data-cta-id="quiero_aprender"
+              data-whatsapp-message={mensajePara('quiero_aprender')}
+              class="js-hero-cta group inline-flex select-none items-center justify-center gap-3 rounded-lg border-2 border-bitcoin px-6 py-4 text-base font-bold text-bitcoin transition-all duration-300 hover:-translate-y-0.5 hover:bg-bitcoin hover:text-black hover:shadow-[0_8px_30px_rgba(247,147,26,0.35)]"
+              style="transition-timing-function:var(--ease);"
+            >
+              <span>Quiero aprender</span>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                class="transition-transform duration-300 group-hover:translate-x-1"
+                style="transition-timing-function:var(--ease);"
+              >
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </Reveal>
+  </div>
+</section>
+
+<style>
+  .hero-bg-hover.is-active {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  const cta = document.querySelector<HTMLElement>('.js-hero-cta');
+  const hoverBg = document.querySelector<HTMLElement>('.hero-bg-hover');
+
+  if (cta && hoverBg) {
+    const on = () => hoverBg.classList.add('is-active');
+    const off = () => hoverBg.classList.remove('is-active');
+    cta.addEventListener('mouseenter', on);
+    cta.addEventListener('mouseleave', off);
+    cta.addEventListener('focus', on);
+    cta.addEventListener('blur', off);
+  }
+</script>

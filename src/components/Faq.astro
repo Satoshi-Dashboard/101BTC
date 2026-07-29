@@ -1,0 +1,117 @@
+---
+import Section from './Section.astro';
+import Button from './Button.astro';
+import Reveal from './Reveal.astro';
+import Accordion from './Accordion.astro';
+
+// Preguntas/respuestas definidas en el frontmatter.
+// Respuestas placeholder claramente marcadas [REEMPLAZAR].
+// Exportado para que index.astro construya el JSON-LD FAQPage (único, en <head> vía Base).
+export const FAQ = [
+  {
+    q: '¿Necesito conocimientos técnicos previos?',
+    body: '[REEMPLAZAR: respuesta — el curso parte desde cero y no exige conocimientos técnicos previos.]',
+  },
+  {
+    q: '¿Cuánto dura el acceso al curso?',
+    body: '[REEMPLAZAR: respuesta — detalla la duración o el acceso de por vida al material.]',
+  },
+  {
+    q: '¿Cómo recibo el material?',
+    body: '[REEMPLAZAR: respuesta — explica la plataforma y la forma de acceso al contenido.]',
+  },
+  {
+    q: '¿Hay garantía de devolución?',
+    body: '[REEMPLAZAR: respuesta — indica si existe política de devolución y sus condiciones.]',
+  },
+  {
+    q: '¿Puedo pagar en cuotas?',
+    body: '[REEMPLAZAR: respuesta — describe los métodos y planes de pago disponibles.]',
+  },
+  {
+    q: '¿El curso está actualizado?',
+    body: '[REEMPLAZAR: respuesta — aclara la frecuencia de actualización de los módulos.]',
+  },
+  {
+    q: '¿Ofrecen soporte o comunidad?',
+    body: '[REEMPLAZAR: respuesta — detalla el soporte y el acceso a la comunidad privada.]',
+  },
+];
+
+// Ítems para el Accordion (single-open, ninguno abierto por defecto).
+const accordionItems = FAQ.map((item) => ({ q: item.q, body: item.body }));
+---
+
+<Section
+  id="faq"
+  class="bg-bg py-16 sm:py-20 lg:py-28"
+  innerClass="flex flex-col gap-10 lg:gap-14"
+>
+  <!-- Encabezado de la sección -->
+  <Reveal class="flex flex-col gap-3">
+    <p
+      class="flex items-center gap-2 font-sans font-semibold uppercase tracking-[0.24px] text-bitcoin"
+      style="font-size:clamp(0.75rem,1.6vw,0.875rem);"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        stroke="none"
+        aria-hidden="true"
+        class="shrink-0 text-bitcoin"
+      >
+        <path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z" />
+      </svg>
+      <span>Preguntas frecuentes</span>
+    </p>
+    <h2
+      class="max-w-[640px] font-sans font-bold text-title"
+      style="font-size:clamp(2rem,5vw,3rem);line-height:1.15;"
+    >
+      Resolvemos tus dudas antes de empezar
+    </h2>
+    <p
+      class="max-w-[640px] font-sans text-muted"
+      style="font-size:clamp(0.95rem,2.2vw,1rem);line-height:1.5;"
+    >
+      Todo lo que necesitas saber sobre el curso, el acceso y el acompañamiento.
+    </p>
+  </Reveal>
+
+  <!-- Acordeón de preguntas (single-open) -->
+  <Reveal delay={120} class="w-full">
+    <Accordion items={accordionItems} single={true} />
+  </Reveal>
+
+  <!-- Bloque CTA final -->
+  <Reveal delay={200} class="w-full">
+    <div
+      class="flex flex-col items-start gap-5 rounded-xl border border-border bg-bg-card p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8"
+    >
+      <div class="flex flex-col gap-1">
+        <p
+          class="font-sans font-bold text-title"
+          style="font-size:clamp(1.25rem,3vw,1.5rem);line-height:1.2;"
+        >
+          ¿No encontraste tu respuesta?
+        </p>
+        <p
+          class="font-sans text-muted"
+          style="font-size:clamp(0.95rem,2.2vw,1rem);line-height:1.5;"
+        >
+          Escríbenos y te ayudamos a resolver cualquier duda.
+        </p>
+      </div>
+      <Button
+        href="[REEMPLAZAR: mailto:contacto@101btc.com]"
+        variant="outline"
+        label="Escríbenos"
+        icon="arrow-right"
+        class="min-h-[44px] shrink-0"
+        ctaId="escribenos"
+      />
+    </div>
+  </Reveal>
+</Section>

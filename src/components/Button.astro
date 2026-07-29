@@ -1,0 +1,65 @@
+---
+import { mensajePara } from '../lib/leads/config';
+
+export interface Props {
+  href?: string;
+  variant?: 'outline' | 'solid-orange' | 'solid-blue';
+  label: string;
+  /** icon name; only 'arrow-right' supported (feather inline). null/'' hides */
+  icon?: 'arrow-right' | null;
+  class?: string;
+  /** Si se define, el botón abre el modal de leads con este identificador. */
+  ctaId?: string;
+}
+
+const {
+  href = '#',
+  variant = 'outline',
+  label,
+  icon = 'arrow-right',
+  class: extraClass = '',
+  ctaId,
+} = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center gap-3 rounded-lg px-6 py-4 font-bold text-base transition-all duration-300 select-none';
+
+const variants: Record<string, string> = {
+  outline:
+    'border-2 border-bitcoin text-bitcoin hover:bg-bitcoin/10 hover:-translate-y-0.5',
+  'solid-orange':
+    'bg-bitcoin text-dark hover:brightness-110 hover:-translate-y-0.5',
+  'solid-blue':
+    'bg-blue text-white hover:brightness-110 hover:-translate-y-0.5',
+};
+
+const cls = `${base} ${variants[variant]} ${extraClass}`;
+---
+
+<a
+  href={href}
+  class={cls}
+  style="transition-timing-function:var(--ease);"
+  data-cta-id={ctaId}
+  data-whatsapp-message={ctaId ? mensajePara(ctaId) : undefined}
+>
+  <span>{label}</span>
+  {
+    icon === 'arrow-right' && (
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <line x1="5" y1="12" x2="19" y2="12" />
+        <polyline points="12 5 19 12 12 19" />
+      </svg>
+    )
+  }
+</a>

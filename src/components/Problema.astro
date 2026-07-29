@@ -1,0 +1,57 @@
+---
+import Section from './Section.astro';
+import Button from './Button.astro';
+import Reveal from './Reveal.astro';
+---
+
+<Section
+  id="problema"
+  class="bg-bg py-16 sm:py-20 lg:py-28"
+  innerClass="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16"
+>
+  <!-- Columna izquierda: texto -->
+  <Reveal class="flex flex-col gap-6">
+    <h2
+      class="max-w-[528px] font-sans font-bold text-title"
+      style="font-size:clamp(2rem,5vw,3rem);line-height:1.15;"
+    >
+      Nadie te enseñó cómo funciona el dinero de verdad
+    </h2>
+
+    <div class="flex max-w-[528px] flex-col gap-[17px]">
+      <p class="font-sans text-muted" style="font-size:clamp(0.95rem,2.2vw,1rem);line-height:1.5;">
+        Trabajas horas de tu vida a cambio de dinero que cada año vale menos.
+        Ahorras, y aun así sientes que no avanzas.
+      </p>
+      <p class="font-sans text-muted" style="font-size:clamp(0.95rem,2.2vw,1rem);line-height:1.5;">
+        Buscas información sobre Bitcoin y solo encuentras promesas de hacerte
+        rico rápido o explicaciones tan técnicas que terminas cerrando la
+        pestaña.
+      </p>
+    </div>
+
+    <div>
+      <Button
+        href="#temario"
+        variant="outline"
+        label="Empezar a entender"
+        icon="arrow-right"
+        class="min-h-[44px]"
+        ctaId="empezar_entender"
+      />
+    </div>
+  </Reveal>
+
+  <!-- Columna derecha: imagen -->
+  <Reveal delay={120} class="w-full">
+    <img
+      src="/img/coin.png"
+      alt="Moneda de Bitcoin"
+      width="767"
+      height="462"
+      loading="lazy"
+      decoding="async"
+      class="h-auto w-full rounded-xl object-cover"
+    />
+  </Reveal>
+</Section>

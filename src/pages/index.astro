@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Stats from '../components/Stats.astro';
+import Problema from '../components/Problema.astro';
+import Temario from '../components/Temario.astro';
+import Instructor from '../components/Instructor.astro';
+import Precio from '../components/Precio.astro';
+import Faq, { FAQ } from '../components/Faq.astro';
+import Footer from '../components/Footer.astro';
+import LeadModal from '../components/LeadModal.astro';
+
+// JSON-LD FAQPage construido desde las preguntas reales de Faq.astro.
+// Único en la página, inyectado en <head> por Base (Faq ya no emite el suyo).
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.body,
+    },
+  })),
+};
+---
+
+<Base jsonld={faqJsonLd}>
+  <Nav />
+  <main>
+    <Hero />
+    <Stats />
+    <Problema />
+    <Temario />
+    <Instructor />
+    <Precio />
+    <Faq />
+  </main>
+  <Footer />
+  <LeadModal />
+</Base>
