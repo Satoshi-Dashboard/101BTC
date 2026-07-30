@@ -93,6 +93,7 @@ if (modal && panel && form && inputCta && botonEnviar) {
     window.clearTimeout(cierreProgramado);
     ultimoFoco = document.activeElement as HTMLElement | null;
     inputCta.value = ctaId;
+    intentoEnvio = false;
     limpiarErrores();
     verSeccion(modo);
 
@@ -154,9 +155,8 @@ if (modal && panel && form && inputCta && botonEnviar) {
     if (perfil) {
       abrir(ctaId, 'salida');
       if (salidaTexto) salidaTexto.textContent = COPY.recurrente;
-      const datos: DatosLead = { ...perfil, cta_origen: ctaId };
-      await registrarLead(datos);
-      irAWhatsapp(datos);
+      const resultado = await registrarLead({ ...perfil, cta_origen: ctaId });
+      irAWhatsapp(resultado.datos);
       cierreProgramado = window.setTimeout(cerrar, 900);
       return;
     }
@@ -165,15 +165,22 @@ if (modal && panel && form && inputCta && botonEnviar) {
   }
 
   // ── Validación en vivo ───────────────────────────────────────────────
-  campos.nombre.addEventListener('blur', () =>
-    mostrarError('nombre', validarNombre(campos.nombre.value))
-  );
-  campos.correo.addEventListener('blur', () =>
-    mostrarError('correo', validarCorreo(campos.correo.value))
-  );
-  campos.telefono.addEventListener('blur', () =>
-    mostrarError('telefono', validarTelefono(campos.telefono.value))
-  );
+  function validarAlSalir(
+    nombre: 'nombre' | 'correo' | 'telefono',
+    validador: (v: string) => string | null
+  ): void {
+    const campo = campos[nombre];
+    // Campo intacto y vacío: no se regaña a nadie por no haber escrito aún.
+    if (!intentoEnvio && campo.value.trim() === '') {
+      mostrarError(nombre, null);
+      return;
+    }
+    mostrarError(nombre, validador(campo.value));
+  }
+
+  campos.nombre.addEventListener('blur', () => validarAlSalir('nombre', validarNombre));
+  campos.correo.addEventListener('blur', () => validarAlSalir('correo', validarCorreo));
+  campos.telefono.addEventListener('blur', () => validarAlSalir('telefono', validarTelefono));
 
   campos.pais.addEventListener('change', () => {
     mostrarError('pais', validarPais(campos.pais.value, NOMBRES_PAIS));
@@ -196,6 +203,7 @@ if (modal && panel && form && inputCta && botonEnviar) {
   form.addEventListener('submit', async (evento) => {
     evento.preventDefault();
     if (enviando) return;
+    intentoEnvio = true;
 
     const errores: Array<[string, string | null]> = [
       ['nombre', validarNombre(campos.nombre.value)],
@@ -229,25 +237,25 @@ if (modal && panel && form && inputCta && botonEnviar) {
       return;
     }
 
-    if (!resultado.sincronizado) {
-      // Supabase no respondió: el lead ya está en localStorage. Se avisa y se sigue.
+    const salir = () => {
+      verSeccion('salida');
+      if (salidaTexto) {
+        salidaTexto.textContent = resultado.registradoPreviamente ? COPY.recurrente : COPY.exito;
+      }
+      irAWhatsapp(resultado.datos);
+      form.reset();
+      cierreProgramado = window.setTimeout(cerrar, resultado.sincronizado ? 1600 : 3000);
+    };
+
+    // Supabase caído: se avisa, pero el lead ya está a salvo en localStorage
+    // y el visitante llega igual a WhatsApp.
+    if (resultado.motivo === 'fallo_red') {
       mostrarError('general', ERRORES.servidor);
-      window.setTimeout(() => {
-        verSeccion('salida');
-        if (salidaTexto) salidaTexto.textContent = COPY.exito;
-        irAWhatsapp(datos);
-        cierreProgramado = window.setTimeout(cerrar, 3000);
-      }, 1400);
+      window.setTimeout(salir, 1400);
       return;
     }
 
-    verSeccion('salida');
-    if (salidaTexto) {
-      salidaTexto.textContent = resultado.registradoPreviamente ? COPY.recurrente : COPY.exito;
-    }
-    irAWhatsapp(datos);
-    form.reset();
-    cierreProgramado = window.setTimeout(cerrar, 1600);
+    salir();
   });
 
   // ── Cierre: backdrop, botón X, Escape ────────────────────────────────

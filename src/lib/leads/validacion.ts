@@ -74,10 +74,19 @@ export interface DatosLead {
   cta_origen: string;
 }
 
+/** Espeja initcap() de Postgres para que el nombre coincida con el guardado. */
+export function capitalizarNombre(valor: string): string {
+  return valor
+    .trim()
+    .replace(/\s+/g, ' ')
+    .toLowerCase()
+    .replace(/(^|\s)(\p{L})/gu, (_, sep, letra) => sep + letra.toUpperCase());
+}
+
 /** Normaliza tal como se enviará a la RPC. */
 export function normalizarDatos(d: DatosLead): DatosLead {
   return {
-    nombre: d.nombre.trim().replace(/\s+/g, ' '),
+    nombre: capitalizarNombre(d.nombre),
     pais: d.pais.trim(),
     telefono: normalizarTelefono(d.telefono),
     correo: d.correo.trim().toLowerCase(),

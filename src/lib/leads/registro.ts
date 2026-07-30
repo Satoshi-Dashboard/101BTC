@@ -16,6 +16,13 @@ export interface ResultadoRegistro {
   registradoPreviamente: boolean;
   /** Mensaje de error de validación devuelto por la RPC, si aplica. */
   errorValidacion: string | null;
+  /**
+   * Por qué no se sincronizó. 'sin_config' es un hueco de despliegue (faltan
+   * credenciales), no una caída: no se le muestra un error al visitante.
+   */
+  motivo: 'sin_config' | 'fallo_red' | null;
+  /** Datos normalizados tal como se guardaron / enviaron. */
+  datos: DatosLead;
 }
 
 const ERRORES_VALIDACION_RPC: Record<string, string> = {
@@ -42,7 +49,16 @@ export async function registrarLead(entrada: DatosLead): Promise<ResultadoRegist
     // Sin credenciales configuradas: respaldo local y seguir.
     guardarBackup(datos, false);
     guardarPerfil(datos);
-    return { sincronizado: false, registradoPreviamente: false, errorValidacion: null };
+    console.warn(
+      '[leads] Supabase sin configurar: el lead quedó solo en localStorage. Revisa .env'
+    );
+    return {
+      sincronizado: false,
+      registradoPreviamente: false,
+      errorValidacion: null,
+      motivo: 'sin_config',
+      datos,
+    };
   }
 
   try {
@@ -60,7 +76,13 @@ export async function registrarLead(entrada: DatosLead): Promise<ResultadoRegist
         `${error.message ?? ''} ${error.hint ?? ''} ${error.details ?? ''}`
       );
       if (validacion) {
-        return { sincronizado: false, registradoPreviamente: false, errorValidacion: validacion };
+        return {
+          sincronizado: false,
+          registradoPreviamente: false,
+          errorValidacion: validacion,
+          motivo: null,
+          datos,
+        };
       }
       throw error;
     }
@@ -71,12 +93,25 @@ export async function registrarLead(entrada: DatosLead): Promise<ResultadoRegist
 
     guardarBackup(datos, true);
     guardarPerfil(datos);
-    return { sincronizado: true, registradoPreviamente: previo, errorValidacion: null };
-  } catch {
+    return {
+      sincronizado: true,
+      registradoPreviamente: previo,
+      errorValidacion: null,
+      motivo: null,
+      datos,
+    };
+  } catch (error) {
     // Supabase caído o red fallando: el lead queda en localStorage y sigue a WhatsApp.
     guardarBackup(datos, false);
     guardarPerfil(datos);
-    return { sincronizado: false, registradoPreviamente: false, errorValidacion: null };
+    console.error('[leads] Fallo al sincronizar con Supabase, guardado local:', error);
+    return {
+      sincronizado: false,
+      registradoPreviamente: false,
+      errorValidacion: null,
+      motivo: 'fallo_red',
+      datos,
+    };
   }
 }
 

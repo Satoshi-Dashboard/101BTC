@@ -100,7 +100,77 @@ Contenido y enlaces placeholder que deben sustituirse antes de producción:
 - Tagline de marca → `[REEMPLAZAR tagline]`
 - Copyright → `[REEMPLAZAR]` en la fila inferior
 
-**CTA de precios** (`src/components/Precio.astro`) — los 3 botones "Quiero mi acceso" apuntan a `#precio`; sustituir por el enlace/checkout real de cada plan.
+**CTA de precios** (`src/components/Precio.astro`) — los 3 botones "Quiero mi acceso" ya no navegan: abren el modal de leads (ver más abajo). El `href="#precio"` queda como fallback sin JS.
+
+---
+
+## Sistema de captura de leads
+
+Todo CTA abre un modal de registro, guarda el lead en Supabase y redirige a WhatsApp
+con un mensaje distinto según el botón pulsado.
+
+### Archivos
+
+| Ruta | Qué hace |
+|---|---|
+| `supabase/migrations/0001_sistema_leads.sql` | Tablas `leads` y `lead_interactions`, RLS y la RPC `registrar_lead`. Pegable en el SQL Editor. |
+| `src/lib/leads/config.ts` | Credenciales desde `.env`, lista de países con prefijo, mensajes por CTA y copy del modal. |
+| `src/lib/leads/supabase.ts` | Cliente. Si faltan credenciales devuelve `null` y el flujo cae al respaldo local. |
+| `src/lib/leads/validacion.ts` | Validación de nombre, país, teléfono y correo (incluye dominios desechables). |
+| `src/lib/leads/registro.ts` | Llama a la RPC, respalda en localStorage y construye la URL de WhatsApp. |
+| `src/lib/leads/almacenamiento.ts` | Claves `lead_email`, `lead_perfil` y `leads_backup`. |
+| `src/lib/leads/exportar.ts` | `window.exportarLeads()` — descarga el respaldo local en CSV. |
+| `src/lib/leads/controlador.ts` | Intercepta los CTAs, gobierna el modal y el envío. |
+| `src/components/LeadModal.astro` | Markup, estilos y animaciones del modal. |
+
+### Mapa de CTAs
+
+Un CTA se declara con `data-cta-id`; el mensaje sale de `MENSAJES_CTA` en `config.ts`.
+Para añadir uno nuevo basta con el atributo (o el prop `ctaId` de `Button.astro`) y una
+entrada en el mapa. Sin entrada cae en `cta_general`.
+
+| Botón | `data-cta-id` | Dónde |
+|---|---|---|
+| Quiero aprender | `quiero_aprender` | `Hero.astro` |
+| Empezar a entender | `empezar_entender` | `Problema.astro` |
+| Quiero mi acceso (BÁSICO $47) | `plan_basico` | `Precio.astro` |
+| Quiero mi acceso (COMPLETO $77) | `plan_completo` | `Precio.astro` |
+| Quiero mi acceso (MENTOR 1 a 1 $500) | `plan_mentor` | `Precio.astro` |
+| Escríbenos | `escribenos` | `Faq.astro` |
+| — | `cta_general` | fallback |
+
+Los enlaces del Nav y del Footer son navegación, no CTAs: siguen funcionando igual.
+
+### Flujo
+
+1. Click en un CTA → `preventDefault()` y se abre el modal con el `cta_origen`.
+2. Si `lead_perfil` existe en localStorage se salta el formulario, se registra la
+   interacción y se va directo a WhatsApp.
+3. Envío → validación en el navegador → RPC `registrar_lead` → respaldo en
+   localStorage → WhatsApp (`window.open`, con `location.href` de reserva).
+4. Si Supabase falla, el lead queda en localStorage y el visitante llega a WhatsApp
+   igual. Nunca se pierde un lead ni se bloquea la experiencia.
+
+### Seguridad
+
+La anon key solo puede `INSERT` y ejecutar la RPC: el RLS niega `SELECT`, `UPDATE` y
+`DELETE`. `ultima_interaccion` y `total_interacciones` solo se tocan dentro de
+`registrar_lead` (`SECURITY DEFINER`, `search_path` fijo), que además revalida todo en
+el servidor. `SELECT` queda reservado a la `service_role` key, que nunca sale del
+dashboard. La IP se lee de la cabecera `x-forwarded-for` en el servidor, no del
+navegador. Leer `SECURITY.md` no es necesario: la anon key es pública por diseño y lo
+que protege los datos es el RLS.
+
+### Pendientes de este sistema
+
+1. **`PUBLIC_SUPABASE_ANON_KEY` en `.env`** — copiar la publishable key del proyecto
+   `uruedheuqpihdbemfgai` (Dashboard → Project Settings → API Keys).
+2. **`PUBLIC_WHATSAPP_NUMERO` en `.env`** — código de país + número, solo dígitos.
+   Sin él la URL de WhatsApp sale sin destinatario.
+3. **Aplicar el SQL** — pegar `supabase/migrations/0001_sistema_leads.sql` en el SQL
+   Editor del proyecto, o `supabase login && supabase db push`.
+
+---
 
 **Assets**: las 4 imágenes se descargaron correctamente a `public/img/` (`hero-bg.png`, `coin.png`, `instructor.png`, `mountain.png`). No quedan URLs remotas pendientes. URLs Figma de origen por si hiciera falta re-descargar:
 - hero-bg.png → `https://www.figma.com/api/mcp/asset/f7b940af-f123-42a1-a744-4051dfc5aeec`
