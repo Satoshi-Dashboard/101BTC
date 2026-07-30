@@ -161,14 +161,29 @@ dashboard. La IP se lee de la cabecera `x-forwarded-for` en el servidor, no del
 navegador. Leer `SECURITY.md` no es necesario: la anon key es pública por diseño y lo
 que protege los datos es el RLS.
 
-### Pendientes de este sistema
+### Estado
 
-1. **`PUBLIC_SUPABASE_ANON_KEY` en `.env`** — copiar la publishable key del proyecto
-   `uruedheuqpihdbemfgai` (Dashboard → Project Settings → API Keys).
-2. **`PUBLIC_WHATSAPP_NUMERO` en `.env`** — código de país + número, solo dígitos.
-   Sin él la URL de WhatsApp sale sin destinatario.
-3. **Aplicar el SQL** — pegar `supabase/migrations/0001_sistema_leads.sql` en el SQL
-   Editor del proyecto, o `supabase login && supabase db push`.
+Operativo end-to-end contra el proyecto `uruedheuqpihdbemfgai`. Migración aplicada,
+`.env` completo (URL, publishable key, número de WhatsApp).
+
+Comprobado contra la base en vivo: la RPC devuelve `200`; un correo repetido devuelve
+`registrado_previamente: true` con el mismo `lead_id`; las 4 validaciones de servidor
+rechazan con `P0001`; y desde la anon key `SELECT`, `UPDATE` y `DELETE` sobre ambas
+tablas devuelven `401 permission denied`.
+
+**La secret key (`sb_secret_…`) no pertenece a este proyecto.** Es un sitio estático:
+cualquier variable que llegue al navegador es pública, así que una secret key aquí solo
+puede filtrarse. Únicamente la publishable key va en `.env`.
+
+### Datos de prueba a borrar
+
+Las verificaciones dejaron 2 leads de prueba. El frontend no puede borrarlos (por
+diseño); hazlo desde el SQL Editor:
+
+```sql
+delete from public.leads
+where correo in ('verificacion.sistema@example.com', 'prueba.interfaz@example.com');
+```
 
 ---
 
