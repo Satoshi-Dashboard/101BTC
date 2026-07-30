@@ -177,13 +177,37 @@ puede filtrarse. Únicamente la publishable key va en `.env`.
 
 ### Datos de prueba a borrar
 
-Las verificaciones dejaron 2 leads de prueba. El frontend no puede borrarlos (por
+Las verificaciones dejaron 3 leads de prueba. El frontend no puede borrarlos (por
 diseño); hazlo desde el SQL Editor:
 
 ```sql
 delete from public.leads
-where correo in ('verificacion.sistema@example.com', 'prueba.interfaz@example.com');
+where correo in (
+  'verificacion.sistema@example.com',
+  'prueba.interfaz@example.com',
+  'prueba.produccion@example.com'
+);
 ```
+
+---
+
+## Despliegue
+
+| | |
+|---|---|
+| Repo | `github.com/Satoshi-Dashboard/101BTC` (rama `main`) |
+| Proyecto Vercel | `101btc` (equipo `luisleonpardos-projects`), framework Astro |
+| Producción | https://101btc.satoshidashboard.com |
+| Alias Vercel | https://101btc.vercel.app |
+
+El repo está conectado al proyecto: cada push a `main` dispara un despliegue de
+producción y el dominio se reasigna automáticamente.
+
+Las tres variables `PUBLIC_*` están configuradas en Vercel para **Production** y
+**Development**. **Preview quedó sin ellas**: `vercel env add … preview` entra en bucle
+en la CLI 50.28.0 (sugiere el mismo comando que falla). Añádelas desde el dashboard si
+quieres que los deploys de preview escriban en Supabase; sin ellas un preview sigue
+funcionando, pero guarda solo en localStorage.
 
 ---
 

@@ -19,3 +19,5 @@ Thumbs.db
 
 # symlinks de skills (rutas absolutas, se regeneran con `npx skills add`)
 .claude/skills/
+
+.vercel
