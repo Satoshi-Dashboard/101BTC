@@ -16,3 +16,6 @@ Thumbs.db
 
 # claude local
 .claude/settings.local.json
+
+# symlinks de skills (rutas absolutas, se regeneran con `npx skills add`)
+.claude/skills/
