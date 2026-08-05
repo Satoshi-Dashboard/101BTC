@@ -3,7 +3,6 @@
 // bg rgba(0,0,0,.25) + backdrop-blur(2px), radius pill, padding 5px, gap 5px.
 const links = [
   { label: 'Inicio', href: '#inicio', active: true },
-  { label: 'Problema', href: '#problema' },
   { label: 'Temario', href: '#temario' },
   { label: 'Instructor', href: '#instructor' },
   { label: 'Planes', href: '#precio' },
@@ -41,7 +40,7 @@ const links = [
                 {l.label}
               </a>
             </li>
-            {l.label === 'Temario' && (
+            {l.label === 'Instructor' && (
               <li class="relative z-10 flex items-center px-1">
                 <a
                   href="/#inicio"
@@ -56,6 +55,15 @@ const links = [
           </>
         ))
       }
+      <li class="relative z-10 ml-1 flex items-center border-l border-white/10 pl-[9px]">
+        <a
+          href="/login"
+          class="flex min-h-[36px] items-center rounded-pill bg-bitcoin px-4 py-2 text-[12px] font-bold tracking-[0.24px] text-black transition-transform duration-300 hover:-translate-y-0.5"
+          style="transition-timing-function:var(--ease);"
+        >
+          Entrar
+        </a>
+      </li>
     </ul>
 
     <!-- Botón hamburguesa (móvil) -->
@@ -139,6 +147,16 @@ const links = [
             </li>
           ))
         }
+        <li class="mt-2 border-t border-white/10 pt-3">
+          <a
+            href="/login"
+            data-nav-link
+            class="flex min-h-[44px] items-center justify-center rounded-lg bg-bitcoin px-4 py-3 text-base font-bold tracking-[0.24px] text-black transition-colors duration-300"
+            style="transition-timing-function:var(--ease);"
+          >
+            Entrar
+          </a>
+        </li>
       </ul>
     </div>
   </div>
@@ -304,6 +322,7 @@ const links = [
 
     // Scroll-spy: mover al item de la sección visible (si no hay hover)
     const sections = items
+      .filter((i) => i.dataset.target?.startsWith('#'))
       .map((i) => document.querySelector(i.dataset.target ?? ''))
       .filter((s): s is HTMLElement => !!s);
 
@@ -325,8 +344,8 @@ const links = [
 
     // Init + recálculo en resize
     const init = () => movePill(activeEl);
-    if (document.readyState === 'complete') init();
-    else window.addEventListener('load', init);
+    init();
+    document.fonts?.ready.then(init);
     let rAF = 0;
     window.addEventListener('resize', () => {
       cancelAnimationFrame(rAF);
