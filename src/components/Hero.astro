@@ -14,7 +14,7 @@ import { mensajePara } from '../lib/leads/config';
     aria-hidden="true"
     fetchpriority="high"
     decoding="async"
-    class="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover"
+    class="js-hero-bg-parallax pointer-events-none absolute inset-[-50px] -z-10 h-[calc(100%+100px)] w-[calc(100%+100px)] max-w-none object-cover will-change-transform"
   />
   <!-- Capa 2: fondo hover (ojo ₿ naranja), fade por opacity -->
   <img
@@ -23,7 +23,7 @@ import { mensajePara } from '../lib/leads/config';
     aria-hidden="true"
     loading="eager"
     decoding="async"
-    class="hero-bg-hover pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover opacity-0 transition-opacity duration-500"
+    class="js-hero-bg-parallax hero-bg-hover pointer-events-none absolute inset-[-50px] -z-10 h-[calc(100%+100px)] w-[calc(100%+100px)] max-w-none object-cover opacity-0 transition-opacity duration-500 will-change-transform"
     style="transition-timing-function:var(--ease);"
   />
   <!-- Capa 3: overlay gradiente a #111 -->
@@ -33,14 +33,22 @@ import { mensajePara } from '../lib/leads/config';
   >
   </div>
 
+  <!-- Título: fijo arriba en móvil para no tapar el ojo del fondo -->
+  <div class="absolute inset-x-0 top-24 z-10 px-5 text-center sm:top-28 sm:px-6 md:hidden">
+    <h1 class="font-serif text-display text-title">
+      <span class="block font-display text-bitcoin">Bitcoin</span>
+      <span class="font-serif text-title">Explicado para humanos.</span>
+    </h1>
+  </div>
+
   <!-- Contenido -->
   <div
     class="relative z-10 mx-auto w-full max-w-[1440px] px-5 py-24 sm:px-6 md:px-10 md:py-32 lg:px-16"
   >
     <Reveal class="w-full">
       <div class="grid grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-14 lg:gap-20">
-        <!-- Title (left) -->
-        <h1 class="text-center font-serif text-display text-title md:text-left">
+        <!-- Title (left, desktop) -->
+        <h1 class="hidden font-serif text-display text-title md:block md:text-left">
           <span class="block font-display text-bitcoin">Bitcoin</span>
           <span class="font-serif text-title">Explicado para humanos.</span>
         </h1>
@@ -48,10 +56,10 @@ import { mensajePara } from '../lib/leads/config';
         <!-- Body (right) -->
         <div class="max-w-[486px] justify-self-center md:justify-self-start">
           <p class="text-center font-sans text-body text-white md:text-left">
-            <b class="font-bold">+500</b> alumnos ya dieron su primer paso en Bitcoin.
+            Ya ayudé a <b class="font-bold">+500</b> alumnos a dar su primer paso en Bitcoin.
             Sin experiencia previa. Sin conocimientos técnicos. No se trata de curiosidad.
             Se trata de entender las herramientas que la gente exitosa ya usa para construir
-            un futuro distinto al que le enseñaron a aceptar.
+            un futuro distinto al que te enseñaron a aceptar.
           </p>
 
           <div class="mt-8 flex justify-center md:justify-start">
@@ -104,5 +112,54 @@ import { mensajePara } from '../lib/leads/config';
     cta.addEventListener('mouseleave', off);
     cta.addEventListener('focus', on);
     cta.addEventListener('blur', off);
+  }
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const heroSection = document.querySelector<HTMLElement>('#inicio');
+  const bgLayers = document.querySelectorAll<HTMLElement>('.js-hero-bg-parallax');
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  if (heroSection && bgLayers.length && !prefersReducedMotion && canHover) {
+    const MAX_BG_OFFSET = 40;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let bgTicking = false;
+
+    const render = () => {
+      currentX += (targetX - currentX) * 0.08;
+      currentY += (targetY - currentY) * 0.08;
+      bgLayers.forEach((layer) => {
+        layer.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      });
+      if (Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05) {
+        requestAnimationFrame(render);
+      } else {
+        bgTicking = false;
+      }
+    };
+
+    heroSection.addEventListener('mousemove', (e) => {
+      const rect = heroSection.getBoundingClientRect();
+      const nx = (e.clientX - rect.left) / rect.width - 0.5;
+      const ny = (e.clientY - rect.top) / rect.height - 0.5;
+      targetX = -nx * MAX_BG_OFFSET;
+      targetY = -ny * MAX_BG_OFFSET;
+      if (!bgTicking) {
+        bgTicking = true;
+        requestAnimationFrame(render);
+      }
+    });
+
+    heroSection.addEventListener('mouseleave', () => {
+      targetX = 0;
+      targetY = 0;
+      if (!bgTicking) {
+        bgTicking = true;
+        requestAnimationFrame(render);
+      }
+    });
   }
 </script>

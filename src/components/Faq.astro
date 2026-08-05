@@ -5,36 +5,35 @@ import Reveal from './Reveal.astro';
 import Accordion from './Accordion.astro';
 
 // Preguntas/respuestas definidas en el frontmatter.
-// Respuestas placeholder claramente marcadas [REEMPLAZAR].
 // Exportado para que index.astro construya el JSON-LD FAQPage (único, en <head> vía Base).
 export const FAQ = [
   {
     q: '¿Necesito conocimientos técnicos previos?',
-    body: '[REEMPLAZAR: respuesta — el curso parte desde cero y no exige conocimientos técnicos previos.]',
+    body: 'No. El curso parte desde cero: no necesitas experiencia previa ni conocimientos técnicos. Cada módulo está pensado para alguien que nunca ha tocado una wallet ni ha comprado Bitcoin.',
   },
   {
     q: '¿Cuánto dura el acceso al curso?',
-    body: '[REEMPLAZAR: respuesta — detalla la duración o el acceso de por vida al material.]',
+    body: 'El acceso es de por vida. Pagas una vez y entras a los 10 módulos y 34 clases cuando quieras, a tu ritmo, sin fecha de vencimiento.',
   },
   {
     q: '¿Cómo recibo el material?',
-    body: '[REEMPLAZAR: respuesta — explica la plataforma y la forma de acceso al contenido.]',
+    body: 'Todo el contenido es 100% online: video-clases organizadas por módulo, disponibles para ver cuantas veces necesites desde cualquier dispositivo. En cuanto se confirma tu pago, te llega el acceso por WhatsApp/correo.',
   },
   {
     q: '¿Hay garantía de devolución?',
-    body: '[REEMPLAZAR: respuesta — indica si existe política de devolución y sus condiciones.]',
+    body: 'No. Al ser contenido digital de acceso inmediato, no manejamos devoluciones. Antes de comprar, escríbenos si tienes dudas sobre si el curso es para ti.',
   },
   {
     q: '¿Puedo pagar en cuotas?',
-    body: '[REEMPLAZAR: respuesta — describe los métodos y planes de pago disponibles.]',
+    body: 'Por ahora los 3 planes (Básico $47, Completo $77, Mentor 1 a 1 $500) son de pago único, sin cuotas. Escríbenos si tu método de pago local necesita otra modalidad y lo vemos.',
   },
   {
     q: '¿El curso está actualizado?',
-    body: '[REEMPLAZAR: respuesta — aclara la frecuencia de actualización de los módulos.]',
+    body: 'Sí. Bitcoin y su entorno cambian rápido, así que los módulos se revisan y actualizan de forma periódica, sin costo adicional para quien ya tiene acceso.',
   },
   {
     q: '¿Ofrecen soporte o comunidad?',
-    body: '[REEMPLAZAR: respuesta — detalla el soporte y el acceso a la comunidad privada.]',
+    body: 'Sí. Todos los planes incluyen acceso a una comunidad privada de alumnos, y puedes escribirnos directo por WhatsApp para resolver dudas puntuales sobre el contenido.',
   },
 ];
 
@@ -73,7 +72,7 @@ const accordionItems = FAQ.map((item) => ({ q: item.q, body: item.body }));
       Resolvemos tus dudas antes de empezar
     </h2>
     <p
-      class="max-w-[640px] font-sans text-muted"
+      class="max-w-[640px] font-sans text-bitcoin"
       style="font-size:clamp(0.95rem,2.2vw,1rem);line-height:1.5;"
     >
       Todo lo que necesitas saber sobre el curso, el acceso y el acompañamiento.
@@ -105,7 +104,7 @@ const accordionItems = FAQ.map((item) => ({ q: item.q, body: item.body }));
         </p>
       </div>
       <Button
-        href="[REEMPLAZAR: mailto:contacto@101btc.com]"
+        href="mailto:luisleon.exe@gmail.com"
         variant="outline"
         label="Escríbenos"
         icon="arrow-right"

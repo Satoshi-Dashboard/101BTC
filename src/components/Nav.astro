@@ -6,7 +6,7 @@ const links = [
   { label: 'Problema', href: '#problema' },
   { label: 'Temario', href: '#temario' },
   { label: 'Instructor', href: '#instructor' },
-  { label: 'Precio', href: '#precio' },
+  { label: 'Planes', href: '#precio' },
   { label: 'Preguntas', href: '#faq' },
 ];
 ---
@@ -25,52 +25,38 @@ const links = [
       <span id="nav-pill" class="nav-pill" aria-hidden="true"></span>
       {
         links.map((l) => (
-          <li>
-            <a
-              href={l.href}
-              data-nav-item
-              data-target={l.href}
-              aria-current={l.active ? 'page' : undefined}
-              class={
-                'relative z-10 flex min-h-[36px] items-center rounded-pill px-4 py-2 text-[12px] font-medium tracking-[0.24px] text-muted-light transition-colors duration-300 ' +
-                (l.active ? 'is-covered' : '')
-              }
-              style="transition-timing-function:var(--ease);"
-            >
-              {l.label}
-            </a>
-          </li>
+          <>
+            <li>
+              <a
+                href={l.href}
+                data-nav-item
+                data-target={l.href}
+                aria-current={l.active ? 'page' : undefined}
+                class={
+                  'relative z-10 flex min-h-[36px] items-center rounded-pill px-4 py-2 text-[12px] font-medium tracking-[0.24px] text-muted-light transition-colors duration-300 ' +
+                  (l.active ? 'is-covered' : '')
+                }
+                style="transition-timing-function:var(--ease);"
+              >
+                {l.label}
+              </a>
+            </li>
+            {l.label === 'Temario' && (
+              <li class="relative z-10 flex items-center px-1">
+                <a
+                  href="/#inicio"
+                  aria-label="101 BTC"
+                  class="flex items-center rounded-pill px-2 py-2 transition-[filter] duration-300 hover:brightness-110"
+                  style="transition-timing-function:var(--ease);"
+                >
+                  <img src="/img/logo%20largo.svg" alt="101 BTC" class="h-5 w-auto" />
+                </a>
+              </li>
+            )}
+          </>
         ))
       }
     </ul>
-
-    <!-- Indicador Live (desktop) -->
-    <a
-      href="https://www.satoshidashboard.com/"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="hidden min-h-[36px] items-center gap-2 rounded-pill px-4 py-2 lg:flex"
-      aria-label="SatoshiDashboard Live"
-    >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        stroke="none"
-        class="text-bitcoin"
-        aria-hidden="true"
-      >
-        <path d="M13 2L3 14h7l-1 8 10-12h-7z" />
-      </svg>
-      <span class="text-[12px] font-bold tracking-[0.24px] text-bitcoin"
-        >SatoshiDashboard Live</span
-      >
-      <span
-        class="nav-dot inline-block h-[7px] w-[7px] rounded-full bg-bitcoin"
-        aria-hidden="true"
-      ></span>
-    </a>
 
     <!-- Botón hamburguesa (móvil) -->
     <button
@@ -141,7 +127,7 @@ const links = [
                 aria-current={l.active ? 'page' : undefined}
                 data-nav-link
                 class={
-                  'flex min-h-[44px] items-center rounded-lg px-4 py-3 text-base tracking-[0.24px] transition-colors duration-300 ' +
+                  'flex min-h-[44px] items-center justify-center rounded-lg px-4 py-3 text-base tracking-[0.24px] transition-colors duration-300 ' +
                   (l.active
                     ? 'font-bold text-bitcoin'
                     : 'font-medium text-muted-light hover:bg-white/10')
@@ -153,35 +139,6 @@ const links = [
             </li>
           ))
         }
-        <li class="mt-1 border-t border-border pt-2">
-          <a
-            href="https://www.satoshidashboard.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-nav-link
-            class="flex min-h-[44px] items-center gap-2 rounded-lg px-4 py-3"
-            aria-label="SatoshiDashboard Live"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              stroke="none"
-              class="text-bitcoin"
-              aria-hidden="true"
-            >
-              <path d="M13 2L3 14h7l-1 8 10-12h-7z" />
-            </svg>
-            <span class="text-base font-bold tracking-[0.24px] text-bitcoin"
-              >SatoshiDashboard Live</span
-            >
-            <span
-              class="nav-dot inline-block h-[7px] w-[7px] rounded-full bg-bitcoin"
-              aria-hidden="true"
-            ></span>
-          </a>
-        </li>
       </ul>
     </div>
   </div>

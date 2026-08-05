@@ -57,7 +57,7 @@ import Reveal from './Reveal.astro';
         <div class="flex flex-col gap-[17px]">
           <p class="font-sans text-muted text-base leading-6">
             Hace más de 5 años no entendía nada de Bitcoin. Ni siquiera sabía
-            qué era una wallet. Me tomó años de estudio, errores, y horas
+            qué era una wallet. Me tomó años de estudio, errores y horas
             leyendo cosas que nadie me explicaba de forma simple, para
             finalmente entender cómo funciona el dinero de verdad.
           </p>
@@ -72,7 +72,7 @@ import Reveal from './Reveal.astro';
           class="border-l-8 border-bitcoin pl-5 font-sans font-semibold italic text-muted text-base leading-6"
         >
           "No te voy a prometer que te harás rico. Te voy a enseñar a que el
-          fruto de tu trabajo deje de esfumarse. Bitcoin no promete nada, y por
+          fruto de tu trabajo deje de esfumarse. Bitcoin no promete nada y por
           eso lo cumple todo."
         </blockquote>
       </div>
@@ -87,15 +87,18 @@ import Reveal from './Reveal.astro';
         aria-label="LinkedIn de Luis Leon"
         class="block"
       >
-        <img
-          src="/img/instructor.png"
-          alt="Luis Leon, instructor de 101 BTC"
-          width="543"
-          height="674"
-          loading="lazy"
-          decoding="async"
-          class="w-full h-auto rounded-card object-cover"
-        />
+        <div class="relative overflow-hidden">
+          <img
+            src="/img/instructor.png"
+            alt="Luis Leon, instructor de 101 BTC"
+            width="543"
+            height="674"
+            loading="lazy"
+            decoding="async"
+            class="block w-full h-auto object-cover"
+            style="mask-image: linear-gradient(to right, transparent 0%, black 35%, black 65%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 35%, black 65%, transparent 100%);"
+          />
+        </div>
       </a>
     </Reveal>
   </div>

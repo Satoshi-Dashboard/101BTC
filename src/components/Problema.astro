@@ -4,54 +4,96 @@ import Button from './Button.astro';
 import Reveal from './Reveal.astro';
 ---
 
-<Section
-  id="problema"
-  class="bg-bg py-16 sm:py-20 lg:py-28"
-  innerClass="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16"
->
-  <!-- Columna izquierda: texto -->
-  <Reveal class="flex flex-col gap-6">
-    <h2
-      class="max-w-[528px] font-sans font-bold text-title"
-      style="font-size:clamp(2rem,5vw,3rem);line-height:1.15;"
-    >
-      Nadie te enseñó cómo funciona el dinero de verdad
-    </h2>
+<Section id="problema" class="bg-bg py-16 sm:py-20 lg:py-28">
+  <!-- Fila superior: texto (izq) + bullets (der) -->
+  <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-2 lg:gap-16">
+    <!-- Columna izquierda: eyebrow + heading + subtexto + CTA -->
+    <Reveal class="flex flex-col gap-6">
+      <h2
+        class="max-w-[528px] font-sans font-bold text-title"
+        style="font-size:clamp(2rem,5vw,3rem);line-height:1.15;"
+      >
+        Nadie te enseñó cómo funciona el dinero de verdad
+      </h2>
 
-    <div class="flex max-w-[528px] flex-col gap-[17px]">
-      <p class="font-sans text-muted" style="font-size:clamp(0.95rem,2.2vw,1rem);line-height:1.5;">
-        Trabajas horas de tu vida a cambio de dinero que cada año vale menos.
-        Ahorras, y aun así sientes que no avanzas.
+      <p class="max-w-[480px] font-sans text-muted" style="font-size:clamp(0.95rem,2.2vw,1rem);line-height:1.5;">
+        La educación financiera real nunca llegó. Así que sigues jugando un juego
+        que no entiendes del todo, con reglas que cambian sin avisarte.
       </p>
-      <p class="font-sans text-muted" style="font-size:clamp(0.95rem,2.2vw,1rem);line-height:1.5;">
-        Buscas información sobre Bitcoin y solo encuentras promesas de hacerte
-        rico rápido o explicaciones tan técnicas que terminas cerrando la
-        pestaña.
-      </p>
-    </div>
 
-    <div>
-      <Button
-        href="#temario"
-        variant="outline"
-        label="Empezar a entender"
-        icon="arrow-right"
-        class="min-h-[44px]"
-        ctaId="empezar_entender"
+      <div>
+        <Button
+          href="#temario"
+          variant="outline"
+          label="Empezar a entender"
+          icon="arrow-right"
+          class="min-h-[44px]"
+          ctaId="empezar_entender"
+        />
+      </div>
+    </Reveal>
+
+    <!-- Columna derecha: bullets con icono -->
+    <Reveal delay={120} class="flex flex-col gap-8">
+      <div class="flex gap-4">
+        <span
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-white/5 text-bitcoin"
+          aria-hidden="true"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+        </span>
+        <div class="flex flex-col gap-1">
+          <h3 class="font-sans text-lg font-bold text-title">El dinero pierde valor</h3>
+          <p class="font-sans text-muted" style="font-size:clamp(0.95rem,2.2vw,1rem);line-height:1.5;">
+            Trabajas horas de tu vida a cambio de dinero que cada año vale menos.
+            Ahorras y aun así sientes que no avanzas.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex gap-4">
+        <span
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-white/5 text-bitcoin"
+          aria-hidden="true"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </span>
+        <div class="flex flex-col gap-1">
+          <h3 class="font-sans text-lg font-bold text-title">Información confusa</h3>
+          <p class="font-sans text-muted" style="font-size:clamp(0.95rem,2.2vw,1rem);line-height:1.5;">
+            Buscas información sobre Bitcoin y solo encuentras promesas de hacerte
+            rico rápido o explicaciones tan técnicas que terminas cerrando la
+            pestaña.
+          </p>
+        </div>
+      </div>
+    </Reveal>
+  </div>
+
+  <!-- Fila inferior: imagen a todo el ancho -->
+  <Reveal delay={200} class="mt-12 w-full lg:mt-16">
+    <div class="relative overflow-hidden rounded-2xl">
+      <img
+        src="/img/fondo.jpg"
+        alt="Moneda de Bitcoin"
+        width="1440"
+        height="600"
+        loading="lazy"
+        decoding="async"
+        class="h-auto max-h-[480px] w-full object-cover"
       />
+      <div
+        class="pointer-events-none absolute inset-0"
+        style="background: radial-gradient(ellipse at center, transparent 25%, var(--bg) 92%), linear-gradient(180deg, var(--bg) 0%, transparent 25%, transparent 75%, var(--bg) 100%), linear-gradient(90deg, var(--bg) 0%, transparent 20%, transparent 80%, var(--bg) 100%);"
+        aria-hidden="true"
+      >
+      </div>
     </div>
-  </Reveal>
-
-  <!-- Columna derecha: imagen -->
-  <Reveal delay={120} class="w-full">
-    <img
-      src="/img/coin.png"
-      alt="Moneda de Bitcoin"
-      width="767"
-      height="462"
-      loading="lazy"
-      decoding="async"
-      class="h-auto w-full rounded-xl object-cover"
-    />
   </Reveal>
 </Section>

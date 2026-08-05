@@ -10,7 +10,7 @@ interface Stat {
 
 const stats: Stat[] = [
   { value: 500, suffix: '+', label: 'Total de alumnos' },
-  { value: 10, label: 'Modulos' },
+  { value: 10, label: 'Módulos' },
   { value: 34, label: 'Clases' },
   { value: 0, suffix: '%', label: 'Conocimiento previo requerido' },
 ];
@@ -34,7 +34,7 @@ const stats: Stat[] = [
           >
             0{stat.suffix ?? ''}
           </dt>
-          <dd class="mt-3 font-sans text-base leading-6 font-normal text-muted">
+          <dd class="mt-3 font-sans text-base leading-6 font-normal text-bitcoin">
             {stat.label}
           </dd>
         </Reveal>

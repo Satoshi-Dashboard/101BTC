@@ -1,16 +1,17 @@
 ---
 import Section from './Section.astro';
 import Reveal from './Reveal.astro';
+import { mensajePara } from '../lib/leads/config';
 
 const year = new Date().getFullYear();
 
 // Nav agrupada por categoría (spec Footer b)
-const navGroups: { title: string; links: { label: string; href: string }[] }[] = [
+const navGroups: { title: string; accent?: 'blue'; links: { label: string; href: string }[] }[] = [
   {
     title: 'Curso',
     links: [
       { label: 'Temario', href: '/#temario' },
-      { label: 'Precio', href: '/#precio' },
+      { label: 'Planes', href: '/#precio' },
       { label: 'Instructor', href: '/#instructor' },
     ],
   },
@@ -19,8 +20,7 @@ const navGroups: { title: string; links: { label: string; href: string }[] }[] =
     links: [
       { label: 'Problema', href: '/#problema' },
       { label: 'Preguntas', href: '/#faq' },
-      { label: 'SatoshiDashboard Live', href: 'https://www.satoshidashboard.com/' },
-      { label: 'Blog', href: '#' /* [REEMPLAZAR blog] */ },
+      { label: 'Blog', href: 'https://satoshidashboard.com/landingpage/blog' },
     ],
   },
   {
@@ -29,6 +29,15 @@ const navGroups: { title: string; links: { label: string; href: string }[] }[] =
       { label: 'Términos', href: '/terminos' },
       { label: 'Privacidad', href: '/privacidad' },
       { label: 'Aviso legal', href: '/aviso-legal' },
+    ],
+  },
+  {
+    title: 'Ecosistema',
+    accent: 'blue',
+    links: [
+      { label: 'SatoshiDashboard', href: 'https://www.satoshidashboard.com/' },
+      { label: 'AssetRock', href: 'https://www.assetrock.io/' },
+      { label: 'Zatobox', href: 'https://www.zatobox.io/' },
     ],
   },
 ];
@@ -56,113 +65,158 @@ const socials: { label: string; href: string; paths: string }[] = [
 ];
 ---
 
-<footer class="w-full border-t border-border bg-bg text-muted">
-  <Section innerClass="py-14 md:py-16">
+<footer class="w-full bg-bg py-6 text-muted sm:py-10 md:py-16">
+  <Section>
     <Reveal>
-      <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[1.4fr_repeat(3,1fr)] lg:gap-8">
-        <!-- (a) Marca -->
-        <div class="max-w-sm">
-          <a
-            href="/#inicio"
-            class="inline-flex items-center rounded-md font-display text-2xl text-bitcoin transition-[filter] duration-300 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bitcoin"
-            style="transition-timing-function:var(--ease);"
+      <div class="overflow-hidden rounded-xl border border-border">
+        <!-- (0) CTA de cierre -->
+        <div
+          class="relative isolate px-5 py-10 text-center sm:px-10 sm:py-16 md:py-20"
+          style="background: linear-gradient(rgba(17,17,17,0.55), rgba(17,17,17,0.75)), url('/img/coin.png'); background-size: cover; background-position: center bottom; background-repeat: no-repeat;"
+        >
+          <h2
+            class="mx-auto max-w-2xl font-sans font-bold text-title"
+            style="font-size:clamp(1.5rem,4vw,2.5rem);line-height:1.15;"
           >
-            Bitcoin
-          </a>
-          <p class="mt-4 font-sans text-base leading-6 text-muted">
-            Explicado para humanos. <span class="text-muted">[REEMPLAZAR tagline]</span>
+            ¿Listo para dar tu primer paso en Bitcoin?
+          </h2>
+          <p class="mx-auto mt-3 max-w-xl font-sans text-base leading-6 text-muted sm:mt-4">
+            Sin experiencia previa, sin tecnicismos. Aprende a entender y proteger tu dinero
+            desde cero.
           </p>
-        </div>
-
-        <!-- (b) + (c) Navegación agrupada por categoría / Legal -->
-        {
-          navGroups.map((group) => (
-            <nav aria-label={group.title}>
-              <h2 class="font-sans text-sm font-bold uppercase tracking-[0.24px] text-title">
-                {group.title}
-              </h2>
-              <ul class="mt-4 flex flex-col gap-1">
-                {group.links.map((link) => (
-                  <li>
-                    <a
-                      href={link.href}
-                      target={link.href.startsWith('http') ? '_blank' : undefined}
-                      rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      class="inline-flex min-h-[44px] items-center font-sans text-base text-muted-light underline-offset-4 transition-colors duration-300 hover:text-bitcoin hover:underline focus-visible:text-bitcoin focus-visible:underline focus-visible:outline-none"
-                      style="transition-timing-function:var(--ease);"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))
-        }
-      </div>
-    </Reveal>
-
-    <!-- (d) Redes -->
-    <Reveal delay={80}>
-      <div class="mt-12 flex flex-wrap items-center gap-3">
-        {
-          socials.map((s) => (
+          <div class="mt-6 flex flex-col items-stretch justify-center gap-3 sm:mt-8 sm:flex-row sm:items-center sm:gap-4">
             <a
-              href={s.href}
-              aria-label={s.label}
-              target={s.href.startsWith('http') ? '_blank' : undefined}
-              rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-              class="inline-flex h-11 w-11 items-center justify-center rounded-md border border-border text-muted-light transition-colors duration-300 hover:border-bitcoin hover:text-bitcoin focus-visible:border-bitcoin focus-visible:text-bitcoin focus-visible:outline-none"
+              href="/#temario"
+              data-cta-id="quiero_aprender"
+              data-whatsapp-message={mensajePara('quiero_aprender')}
+              class="inline-flex min-h-[48px] items-center justify-center rounded-lg bg-bitcoin px-6 py-4 font-sans text-base font-bold text-dark transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_8px_30px_rgba(247,147,26,0.35)]"
               style="transition-timing-function:var(--ease);"
             >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-                set:html={s.paths}
-              />
+              Quiero aprender
             </a>
-          ))
-        }
+            <a
+              href="/#faq"
+              data-cta-id="escribenos"
+              data-whatsapp-message={mensajePara('escribenos')}
+              class="inline-flex min-h-[48px] items-center justify-center rounded-lg border-2 border-bitcoin px-6 py-4 font-sans text-base font-bold text-bitcoin transition-all duration-300 hover:-translate-y-0.5 hover:bg-bitcoin hover:text-dark hover:shadow-[0_8px_30px_rgba(247,147,26,0.35)]"
+              style="transition-timing-function:var(--ease);"
+            >
+              Contáctanos
+            </a>
+          </div>
+        </div>
+
+        <!-- (1) Cuerpo del footer -->
+        <div class="border-t border-border bg-bg-card px-5 py-8 sm:px-10 sm:py-10 md:py-12">
+          <div class="grid grid-cols-2 gap-x-5 gap-y-8 sm:gap-x-6 sm:gap-y-10 md:grid-cols-2 lg:grid-cols-[1.2fr_repeat(4,1fr)] lg:gap-8">
+            <!-- (a) Marca -->
+            <div class="col-span-2 mx-auto max-w-sm text-center sm:mx-0 sm:text-left lg:col-span-1">
+              <a
+                href="/#inicio"
+                class="inline-flex items-center rounded-md transition-[filter] duration-300 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bitcoin"
+                style="transition-timing-function:var(--ease);"
+              >
+                <img
+                  src="/img/logo%20largo.svg"
+                  alt="101 BTC"
+                  class="h-5 w-auto sm:h-6"
+                />
+              </a>
+              <p class="mt-4 font-sans text-base leading-6 text-muted">
+                Explicado para humanos. Un proyecto de SatoshiDashboard para enseñarte
+                Bitcoin desde cero, sin tecnicismos.
+              </p>
+
+              <!-- (d) Redes -->
+              <div class="mt-6 flex flex-wrap items-center justify-center gap-3 sm:justify-start">
+                {
+                  socials.map((s) => (
+                    <a
+                      href={s.href}
+                      aria-label={s.label}
+                      target={s.href.startsWith('http') ? '_blank' : undefined}
+                      rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      class="inline-flex h-11 w-11 items-center justify-center rounded-md border border-border text-muted-light transition-colors duration-300 hover:border-bitcoin hover:text-bitcoin focus-visible:border-bitcoin focus-visible:text-bitcoin focus-visible:outline-none"
+                      style="transition-timing-function:var(--ease);"
+                    >
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                        set:html={s.paths}
+                      />
+                    </a>
+                  ))
+                }
+              </div>
+            </div>
+
+            <!-- (b) + (c) Navegación agrupada por categoría / Legal -->
+            {
+              navGroups.map((group) => (
+                <nav aria-label={group.title} class="text-center sm:text-left">
+                  <h2
+                    class={`font-sans text-sm font-bold uppercase tracking-[0.24px] ${group.accent === 'blue' ? 'text-[#FFD500]' : 'text-bitcoin'}`}
+                  >
+                    {group.title}
+                  </h2>
+                  <ul class="mt-4 flex flex-col items-center gap-1 sm:items-start">
+                    {group.links.map((link) => (
+                      <li>
+                        <a
+                          href={link.href}
+                          target={link.href.startsWith('http') ? '_blank' : undefined}
+                          rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                          class={`inline-flex min-h-[44px] items-center font-sans text-base text-muted-light underline-offset-4 transition-colors duration-300 focus-visible:underline focus-visible:outline-none ${group.accent === 'blue' ? 'hover:text-[#FFD500] focus-visible:text-[#FFD500]' : 'hover:text-bitcoin focus-visible:text-bitcoin'}`}
+                          style="transition-timing-function:var(--ease);"
+                        >
+                          {link.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              ))
+            }
+          </div>
+
+          <!-- (e) Descargo de responsabilidad resumido (versión completa en /aviso-legal) -->
+          <p class="mx-auto mt-10 w-full text-center font-sans text-sm leading-6 text-muted">
+            <strong class="font-bold text-muted-light">Aviso importante:</strong> 101 BTC
+            es un curso educativo. <strong class="font-bold text-muted-light"
+              >No es asesoría financiera, de inversión, fiscal ni legal.</strong
+            > Bitcoin es volátil y sus transacciones son irreversibles: puedes perder
+            todo tu capital. Tus decisiones son tuyas y bajo tu propio riesgo. Nunca
+            pedimos claves privadas ni frases semilla. Detalle completo en el
+            <a
+              href="/aviso-legal#descargo"
+              class="text-bitcoin underline underline-offset-4">descargo de responsabilidad</a
+            >.
+          </p>
+
+          <!-- Fila inferior: año dinámico -->
+          <div
+            class="mt-10 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 text-center sm:flex-row sm:items-center sm:text-left"
+          >
+            <p class="font-sans text-sm leading-6 text-muted">
+              © {year} 101 BTC SatoshiDashboard. Todos los derechos reservados.
+            </p>
+            <a
+              href="/#inicio"
+              class="inline-flex min-h-[44px] items-center font-sans text-sm text-muted transition-colors duration-300 hover:text-bitcoin focus-visible:text-bitcoin focus-visible:outline-none"
+              style="transition-timing-function:var(--ease);"
+            >
+              Volver arriba
+            </a>
+          </div>
+        </div>
       </div>
     </Reveal>
-
-    <!-- (e) Descargo de responsabilidad resumido (versión completa en /aviso-legal) -->
-    <Reveal delay={120}>
-      <p class="mx-auto mt-10 w-full text-center font-sans text-sm leading-6 text-muted">
-        <strong class="font-bold text-muted-light">Aviso importante:</strong> 101 BTC
-        es un curso educativo. <strong class="font-bold text-muted-light"
-          >No es asesoría financiera, de inversión, fiscal ni legal.</strong
-        > Bitcoin es volátil y sus transacciones son irreversibles: puedes perder
-        todo tu capital. Tus decisiones son tuyas y bajo tu propio riesgo. Nunca
-        pedimos claves privadas ni frases semilla. Detalle completo en el
-        <a
-          href="/aviso-legal#descargo"
-          class="text-bitcoin underline underline-offset-4">descargo de responsabilidad</a
-        >.
-      </p>
-    </Reveal>
   </Section>
-
-  <!-- Fila inferior: año dinámico -->
-  <div class="border-t border-border">
-    <Section innerClass="flex flex-col items-start justify-between gap-4 py-6 sm:flex-row sm:items-center">
-      <p class="font-sans text-sm leading-6 text-muted">
-        © {year} 101 BTC. <span class="text-muted">[REEMPLAZAR]</span> Todos los derechos reservados.
-      </p>
-      <a
-        href="/#inicio"
-        class="inline-flex min-h-[44px] items-center font-sans text-sm text-muted transition-colors duration-300 hover:text-bitcoin focus-visible:text-bitcoin focus-visible:outline-none"
-        style="transition-timing-function:var(--ease);"
-      >
-        Volver arriba
-      </a>
-    </Section>
-  </div>
 </footer>
