@@ -1,0 +1,211 @@
+---
+import Base from '../layouts/Base.astro';
+
+export interface CrumbSegment {
+  label: string;
+  href?: string;
+}
+
+export interface Props {
+  title: string;
+  description?: string;
+  active: 'inicio' | 'mis-clases' | 'progreso' | 'certificado' | 'configuracion';
+  /** Segmentos del breadcrumb. El último se resalta y no es clickeable. */
+  crumb?: (string | CrumbSegment)[];
+}
+
+const {
+  title,
+  description = 'Accede a tus módulos de Bitcoin 101.',
+  active,
+  crumb = [{ label: 'Inicio', href: '/home' }],
+} = Astro.props;
+
+const crumbSegments: CrumbSegment[] = crumb.map((c) => (typeof c === 'string' ? { label: c } : c));
+
+const nav = [
+  { key: 'inicio', label: 'Inicio', icon: 'home', href: '/home' },
+  { key: 'mis-clases', label: 'Mis clases', icon: 'book', href: '/mis-clases' },
+  { key: 'progreso', label: 'Progreso', icon: 'chart', href: '/progreso' },
+  { key: 'certificado', label: 'Certificado', icon: 'award', href: '/certificado' },
+  { key: 'configuracion', label: 'Configuración', icon: 'settings', href: '/configuracion' },
+];
+
+const icons: Record<string, string> = {
+  home: 'M3 11l9-8 9 8M5 10v10h14V10',
+  book: 'M4 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4zm0 0v14',
+  chart: 'M4 20V10M12 20V4M20 20v-7',
+  award: 'M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12zM8.5 13.5 7 21l5-2.5L17 21l-1.5-7.5',
+  settings:
+    'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 8.96 19.4a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.6 8.96a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.56 1.04H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.56 1.04z',
+  logout: 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9',
+};
+---
+
+<Base title={title} description={description}>
+  <div class="flex h-screen bg-bg">
+    <!-- Sidebar -->
+    <aside
+      id="sidebar"
+      class="sticky top-0 relative hidden h-screen w-60 shrink-0 flex-col justify-between overflow-visible border-r border-border p-6 transition-[width] duration-300 lg:flex"
+      style="transition-timing-function:var(--ease);"
+    >
+      <button
+        type="button"
+        id="sidebar-toggle"
+        aria-label="Minimizar menú"
+        aria-expanded="true"
+        class="absolute -right-3.5 top-8 z-10 flex h-7 w-7 items-center justify-center rounded-full border border-border bg-dark text-muted transition-colors duration-300 hover:border-bitcoin/40 hover:text-title"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 6 9 12 15 18" />
+        </svg>
+      </button>
+
+      <div class="flex flex-col gap-8 overflow-y-auto">
+        <a href="/#inicio" aria-label="Bitcoin 101" class="flex items-center gap-3 rounded-lg px-3 py-2.5">
+          <img src="/img/logo%20largo.svg" alt="Bitcoin 101" class="js-sidebar-label h-6 w-auto" />
+          <img src="/img/logo.svg" alt="Bitcoin 101" class="js-sidebar-icon hidden h-6 w-6 shrink-0" />
+        </a>
+
+        <nav class="flex flex-col gap-1">
+          {
+            nav.map((n) => (
+              <a
+                href={n.href}
+                title={n.label}
+                class={
+                  'flex items-center gap-3 rounded-lg border border-transparent px-3 py-2.5 font-sans text-sm font-medium transition-all duration-300 ' +
+                  (n.key === active
+                    ? 'bg-bitcoin/15 text-bitcoin'
+                    : 'text-muted hover:border-white/10 hover:bg-white/10 hover:text-title hover:backdrop-blur-md')
+                }
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0">
+                  <path d={icons[n.icon]} />
+                </svg>
+                <span class="js-sidebar-label">{n.label}</span>
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+
+      <a
+        href="/login"
+        title="Salir"
+        class="flex items-center gap-3 rounded-lg border border-transparent px-3 py-2.5 font-sans text-sm font-medium text-muted transition-all duration-300 hover:border-white/10 hover:bg-white/10 hover:text-title hover:backdrop-blur-md"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="shrink-0">
+          <path d={icons.logout} />
+        </svg>
+        <span class="js-sidebar-label">Salir</span>
+      </a>
+    </aside>
+
+    <div class="flex min-w-0 flex-1 flex-col overflow-y-auto">
+      <!-- Topbar -->
+      <header class="flex items-center justify-between gap-4 border-b border-border px-6 py-4 sm:px-10">
+        <p class="font-sans text-sm text-muted">
+          {
+            crumbSegments.map((segment, i) => {
+              const isLast = i === crumbSegments.length - 1;
+              return (
+                <>
+                  {i > 0 && <span class="mx-1 text-border">/</span>}
+                  {!isLast && segment.href ? (
+                    <a
+                      href={segment.href}
+                      class="transition-colors duration-300 hover:text-title"
+                    >
+                      {segment.label}
+                    </a>
+                  ) : (
+                    <span class={isLast ? 'text-title' : undefined}>{segment.label}</span>
+                  )}
+                </>
+              );
+            })
+          }
+        </p>
+
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-2">
+            <div class="flex h-8 w-8 items-center justify-center rounded-full bg-bitcoin/20 font-sans text-xs font-bold text-bitcoin">
+              TU
+            </div>
+            <span class="hidden font-sans text-sm font-medium text-title sm:inline">Tu cuenta</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Contenido -->
+      <main class="dash-fade-in mx-auto w-full max-w-[1100px] flex-1 px-6 py-8 sm:px-10">
+        <slot />
+      </main>
+    </div>
+  </div>
+
+  <style>
+    @keyframes dash-fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    .dash-fade-in {
+      animation: dash-fade-in 0.5s var(--ease) both;
+    }
+    .dash-fade-in > :global(*) {
+      animation: dash-fade-in 0.5s var(--ease) both;
+    }
+    .dash-fade-in > :global(*:nth-child(1)) {
+      animation-delay: 60ms;
+    }
+    .dash-fade-in > :global(*:nth-child(2)) {
+      animation-delay: 120ms;
+    }
+    .dash-fade-in > :global(*:nth-child(3)) {
+      animation-delay: 180ms;
+    }
+    .dash-fade-in > :global(*:nth-child(4)) {
+      animation-delay: 240ms;
+    }
+    .dash-fade-in > :global(*:nth-child(n + 5)) {
+      animation-delay: 300ms;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .dash-fade-in,
+      .dash-fade-in > :global(*) {
+        animation: none;
+      }
+    }
+  </style>
+
+  <script>
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.getElementById('sidebar-toggle');
+
+    toggle?.addEventListener('click', () => {
+      if (!sidebar) return;
+      const collapsed = sidebar.classList.toggle('is-collapsed');
+      sidebar.classList.toggle('w-60', !collapsed);
+      sidebar.classList.toggle('w-20', collapsed);
+      sidebar.classList.toggle('items-center', collapsed);
+
+      sidebar
+        .querySelectorAll<HTMLElement>('.js-sidebar-label')
+        .forEach((el) => (el.style.display = collapsed ? 'none' : ''));
+      sidebar
+        .querySelectorAll<HTMLElement>('.js-sidebar-icon')
+        .forEach((el) => el.classList.toggle('hidden', !collapsed));
+
+      toggle.setAttribute('aria-expanded', String(!collapsed));
+      toggle.querySelector('svg')?.setAttribute('style', collapsed ? 'transform:rotate(180deg)' : '');
+    });
+  </script>
+</Base>

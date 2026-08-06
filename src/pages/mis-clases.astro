@@ -1,0 +1,188 @@
+---
+import DashboardShell from '../components/DashboardShell.astro';
+import { TEMARIO } from '../lib/temario';
+
+// Placeholder de dashboard: solo frontend. El progreso real (qué clases
+// completó cada alumno) se conecta a auth/backend después.
+---
+
+<DashboardShell
+  title="Mis clases — Bitcoin 101"
+  active="mis-clases"
+  crumb={['Cursos', 'Bitcoin 101 — Bitcoin explicado para humanos']}
+>
+  <div class="overflow-hidden rounded-card">
+    <img src="/img/mountain.png" alt="" class="h-48 w-full object-cover sm:h-64" />
+  </div>
+
+  <div class="mt-8 grid grid-cols-1 gap-10 lg:grid-cols-[1fr_320px]">
+    <!-- Columna principal -->
+    <div class="flex flex-col gap-6">
+      <!-- Tabs -->
+      <div class="flex items-center gap-2 border-b border-border">
+        <button
+          type="button"
+          class="border-b-2 border-bitcoin px-1 pb-3 font-sans text-sm font-semibold text-title"
+        >
+          Clases
+        </button>
+      </div>
+
+      <!-- Módulos: acordeón con clases + checkbox de completado -->
+      <div id="temario-accordion" class="flex flex-col gap-3">
+        {
+          TEMARIO.map((m) => (
+            <div class="overflow-hidden rounded-lg border border-border bg-bg-card">
+              <button
+                type="button"
+                class="js-modulo-toggle flex w-full items-center gap-4 p-4 text-left"
+                aria-expanded="false"
+              >
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-bitcoin/15 font-sans text-sm font-bold text-bitcoin">
+                  {m.numero}
+                </span>
+                <span class="flex-1 font-sans text-sm font-medium text-title">{m.titulo}</span>
+                <span class="font-sans text-xs text-muted">{m.clases.length} clases</span>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                  class="js-modulo-chevron shrink-0 text-muted transition-transform duration-300"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+
+              <div
+                class="js-modulo-panel flex flex-col gap-1 border-t border-border px-4 py-2"
+                style="display:none;"
+              >
+                {
+                  m.clases.map((c) => (
+                    <a
+                      href={`/clase/${c.slug}`}
+                      class="flex items-center gap-3 rounded-lg px-2 py-2.5 transition-colors duration-300 hover:bg-white/5"
+                    >
+                      <span
+                        class="js-clase-check flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-border text-transparent transition-colors duration-300"
+                        data-clase-slug={c.slug}
+                        role="checkbox"
+                        aria-checked="false"
+                        tabindex="0"
+                      >
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </span>
+                      <span class="font-sans text-sm text-muted">
+                        Clase {c.numero}. {c.titulo}
+                      </span>
+                    </a>
+                  ))
+                }
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Panel lateral -->
+    <aside class="flex flex-col gap-6">
+      <div class="rounded-xl border border-border bg-bg-card p-5">
+        <p class="font-sans text-xs text-muted">Progreso del curso</p>
+        <p class="mt-1 font-sans text-2xl font-bold text-title">10%</p>
+        <div class="mt-3 h-2 w-full overflow-hidden rounded-pill bg-white/10">
+          <div class="h-full w-[10%] rounded-pill bg-bitcoin"></div>
+        </div>
+        <p class="mt-2 font-sans text-xs text-muted">1 de 10 módulos completados</p>
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <button
+          type="button"
+          class="rounded-lg bg-bitcoin px-4 py-3 font-sans text-sm font-bold text-black transition-all duration-300 hover:brightness-110"
+        >
+          Continuar viendo
+        </button>
+        <a
+          href="mailto:luisleon.exe@gmail.com"
+          class="rounded-lg border border-border px-4 py-3 text-center font-sans text-sm font-medium text-title transition-colors duration-300 hover:border-bitcoin/40"
+        >
+          Contactar soporte
+        </a>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // Acordeón de módulos (single-open: abrir uno cierra los demás)
+    const moduloToggles = Array.from(document.querySelectorAll<HTMLButtonElement>('.js-modulo-toggle'));
+
+    const setModulo = (btn: HTMLButtonElement, open: boolean) => {
+      const panel = btn.nextElementSibling as HTMLElement | null;
+      const chevron = btn.querySelector<HTMLElement>('.js-modulo-chevron');
+      if (!panel) return;
+      btn.setAttribute('aria-expanded', String(open));
+      panel.style.display = open ? 'flex' : 'none';
+      chevron?.style.setProperty('transform', open ? 'rotate(180deg)' : '');
+    };
+
+    moduloToggles.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        moduloToggles.forEach((b) => setModulo(b, b === btn && !open));
+      });
+    });
+
+    // Checkbox de clase completada (persistido en localStorage, solo frontend)
+    // Guarda { [slug]: 'YYYY-MM-DD' } — la fecha alimenta el heatmap de /progreso.
+    const STORAGE_KEY = 'bitcoin101_progreso_v2';
+    const getProgreso = (): Record<string, string> => {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}');
+      } catch {
+        return {};
+      }
+    };
+    const setProgreso = (data: Record<string, string>) => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    };
+
+    const paint = (el: HTMLElement, checked: boolean) => {
+      el.setAttribute('aria-checked', String(checked));
+      el.classList.toggle('bg-bitcoin', checked);
+      el.classList.toggle('border-bitcoin', checked);
+      el.classList.toggle('text-black', checked);
+      el.classList.toggle('text-transparent', !checked);
+    };
+
+    const progreso = getProgreso();
+    document.querySelectorAll<HTMLElement>('.js-clase-check').forEach((el) => {
+      const slug = el.dataset.claseSlug ?? '';
+      paint(el, slug in progreso);
+
+      const toggle = (e: Event) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const current = getProgreso();
+        const checked = slug in current;
+        if (checked) delete current[slug];
+        else current[slug] = new Date().toISOString().slice(0, 10);
+        setProgreso(current);
+        paint(el, !checked);
+      };
+
+      el.addEventListener('click', toggle);
+      el.addEventListener('keydown', (e) => {
+        if (e.key === ' ' || e.key === 'Enter') toggle(e);
+      });
+    });
+  </script>
+</DashboardShell>

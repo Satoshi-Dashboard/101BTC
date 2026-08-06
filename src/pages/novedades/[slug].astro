@@ -1,0 +1,108 @@
+---
+import DashboardShell from '../../components/DashboardShell.astro';
+import { NOVEDADES } from '../../lib/novedades';
+
+export function getStaticPaths() {
+  return NOVEDADES.map((novedad) => ({
+    params: { slug: novedad.slug },
+    props: { novedad },
+  }));
+}
+
+const { novedad } = Astro.props;
+
+const fechaLegible = new Date(novedad.fecha).toLocaleDateString('es', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+
+<DashboardShell
+  title={`${novedad.titulo} — Bitcoin 101`}
+  description={novedad.subtitulo}
+  active="inicio"
+  crumb={[
+    { label: 'Inicio', href: '/home' },
+    { label: 'Novedades', href: '/novedades' },
+    { label: novedad.titulo },
+  ]}
+>
+  <article class="mx-auto max-w-[720px]">
+    <a
+      href="/novedades"
+      class="flex w-fit items-center gap-1 font-sans text-sm text-muted transition-colors duration-300 hover:text-title"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+      Volver a novedades
+    </a>
+
+    <div class="mt-6 overflow-hidden rounded-card">
+      <img src={novedad.imagen} alt="" class="h-64 w-full object-cover" />
+    </div>
+
+    <div class="mt-6 flex flex-col gap-3">
+      <div class="flex items-center gap-3">
+        <span class="w-fit rounded-pill bg-bitcoin px-2.5 py-1 font-sans text-xs font-bold text-black">
+          {novedad.badge}
+        </span>
+        <time datetime={novedad.fecha} class="font-sans text-xs text-muted">
+          {fechaLegible}
+        </time>
+      </div>
+      <h1 class="font-sans text-2xl font-bold text-title sm:text-3xl">{novedad.titulo}</h1>
+      <p class="font-sans text-muted">{novedad.subtitulo}</p>
+    </div>
+
+    <!-- Cuerpo: párrafos, hipervínculos y video, en el orden que vengan del array -->
+    <div class="mt-8 flex flex-col gap-5">
+      {
+        novedad.cuerpo.map((block) => {
+          if (block.type === 'p') {
+            return <p class="font-sans text-base leading-relaxed text-title">{block.text}</p>;
+          }
+          if (block.type === 'link') {
+            const isExternal = block.href.startsWith('http');
+            return (
+              <a
+                href={block.href}
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noopener noreferrer' : undefined}
+                class="flex w-fit items-center gap-2 font-sans text-sm font-bold text-bitcoin transition-colors duration-300 hover:brightness-110"
+              >
+                {block.text}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </a>
+            );
+          }
+          if (block.type === 'video') {
+            return (
+              <div class="overflow-hidden rounded-xl border border-border">
+                <div class="aspect-video w-full">
+                  <iframe
+                    src={block.src}
+                    title={block.caption ?? novedad.titulo}
+                    class="h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  />
+                </div>
+                {block.caption && (
+                  <p class="border-t border-border bg-bg-card px-4 py-2 font-sans text-xs text-muted">
+                    {block.caption}
+                  </p>
+                )}
+              </div>
+            );
+          }
+          return null;
+        })
+      }
+    </div>
+  </article>
+</DashboardShell>

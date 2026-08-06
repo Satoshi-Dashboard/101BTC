@@ -1,0 +1,142 @@
+---
+import DashboardShell from '../components/DashboardShell.astro';
+import { NOVEDADES } from '../lib/novedades';
+import { ECOSISTEMA } from '../lib/ecosistema';
+
+// Placeholder de dashboard: solo frontend. La "última clase" es estática —
+// se conecta a datos reales después. En Inicio solo se muestran las 3 más
+// recientes; el historial completo vive en /novedades.
+const ultimaClase = {
+  modulo: 3,
+  titulo: 'La transacción como unidad básica de la economía',
+  progreso: 10,
+};
+
+const novedades = NOVEDADES.slice(0, 3);
+---
+
+<DashboardShell title="Inicio — Bitcoin 101" active="inicio">
+  <!-- Retomar última clase -->
+  <a
+    href="/mis-clases"
+    class="flex flex-col gap-6 overflow-hidden rounded-card border border-border bg-bg-card transition-colors duration-300 hover:border-bitcoin/40 sm:flex-row sm:items-center"
+  >
+    <img src="/img/mountain.png" alt="" class="h-40 w-full object-cover sm:h-full sm:w-72" />
+    <div class="flex flex-1 flex-col gap-3 p-6 sm:py-8 sm:pr-8">
+      <p class="font-sans text-xs font-semibold uppercase tracking-[0.24px] text-bitcoin">
+        Retomar donde te quedaste
+      </p>
+      <p class="font-sans text-xl font-bold text-title">
+        Módulo {ultimaClase.modulo}. {ultimaClase.titulo}
+      </p>
+      <div class="mt-1 h-2 w-full max-w-[280px] overflow-hidden rounded-pill bg-white/10">
+        <div class={`h-full rounded-pill bg-bitcoin`} style={`width:${ultimaClase.progreso}%`} />
+      </div>
+      <span class="mt-2 inline-flex w-fit items-center gap-2 font-sans text-sm font-bold text-bitcoin">
+        Continuar viendo
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </svg>
+      </span>
+    </div>
+  </a>
+
+  <!-- Novedades y destacados -->
+  <div class="mt-12 flex items-center justify-between">
+    <p class="font-sans text-lg font-bold text-title">Novedades y destacados</p>
+    <a
+      href="/novedades"
+      class="flex items-center gap-1 font-sans text-sm font-medium text-muted transition-colors duration-300 hover:text-bitcoin"
+    >
+      Ir a novedades
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="9 6 15 12 9 18" />
+      </svg>
+    </a>
+  </div>
+
+  <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      novedades.map((n) => (
+        <a
+          href={`/novedades/${n.slug}`}
+          class="flex flex-col overflow-hidden rounded-xl border border-border bg-bg-card transition-colors duration-300 hover:border-bitcoin/40"
+        >
+          <div class="relative">
+            <img src={n.imagen} alt="" class="h-36 w-full object-cover" />
+            <span class="absolute left-3 top-3 rounded-pill bg-bitcoin px-2.5 py-1 font-sans text-xs font-bold text-black">
+              {n.badge}
+            </span>
+          </div>
+          <div class="flex flex-col gap-1 p-4">
+            <p class="font-sans text-sm font-bold text-title">{n.titulo}</p>
+            <p class="font-sans text-xs text-muted">{n.subtitulo}</p>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+
+  <!-- Ecosistema -->
+  <div class="mt-12">
+    <p class="font-sans text-lg font-bold text-title">Ecosistema</p>
+    <p class="mt-1 font-sans text-sm text-muted">Otras marcas de SatoshiDashboard.</p>
+  </div>
+
+  <div class="eco-row mt-5 flex h-72 gap-2 overflow-hidden rounded-xl">
+    {
+      ECOSISTEMA.map((e, i) => (
+        <a
+          href={e.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          class={`eco-card group relative flex min-w-0 flex-col justify-end overflow-hidden p-4 transition-[flex-grow] duration-500 ease-out ${i === 0 ? 'eco-card-lead' : ''}`}
+          style="transition-timing-function:var(--ease);"
+        >
+          <img
+            src={e.imagen}
+            alt=""
+            class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+            style="transition-timing-function:var(--ease);"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            class="absolute right-4 top-4 text-white/80 opacity-0 transition-opacity duration-300 group-hover:text-bitcoin group-hover:opacity-100"
+          >
+            <path d="M7 17L17 7" />
+            <path d="M7 7h10v10" />
+          </svg>
+          <p class="relative whitespace-nowrap font-sans text-base font-bold text-white">{e.nombre}</p>
+          <p class="relative max-h-0 overflow-hidden whitespace-nowrap font-sans text-xs text-white/70 opacity-0 transition-all duration-300 group-hover:max-h-6 group-hover:opacity-100">
+            {e.descripcion}
+          </p>
+        </a>
+      ))
+    }
+  </div>
+</DashboardShell>
+
+<style>
+  .eco-card {
+    flex: 1;
+  }
+  .eco-card-lead {
+    flex: 3;
+  }
+  .eco-row:hover .eco-card {
+    flex: 1;
+  }
+  .eco-row .eco-card:hover {
+    flex: 4;
+  }
+</style>

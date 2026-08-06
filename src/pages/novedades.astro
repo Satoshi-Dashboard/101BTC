@@ -1,0 +1,46 @@
+---
+import DashboardShell from '../components/DashboardShell.astro';
+import { NOVEDADES } from '../lib/novedades';
+---
+
+<DashboardShell
+  title="Novedades — Bitcoin 101"
+  active="inicio"
+  crumb={[{ label: 'Inicio', href: '/home' }, { label: 'Novedades' }]}
+>
+  <div class="flex flex-col gap-2">
+    <a
+      href="/home"
+      class="flex w-fit items-center gap-1 font-sans text-sm text-muted transition-colors duration-300 hover:text-title"
+    >
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+      Volver a Inicio
+    </a>
+    <p class="font-sans text-2xl font-bold text-title">Novedades y destacados</p>
+    <p class="font-sans text-sm text-muted">Todo lo nuevo, en un solo lugar.</p>
+  </div>
+
+  <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    {
+      NOVEDADES.map((n) => (
+        <a
+          href={`/novedades/${n.slug}`}
+          class="flex flex-col overflow-hidden rounded-xl border border-border bg-bg-card transition-colors duration-300 hover:border-bitcoin/40"
+        >
+          <div class="relative">
+            <img src={n.imagen} alt="" class="h-36 w-full object-cover" />
+            <span class="absolute left-3 top-3 rounded-pill bg-bitcoin px-2.5 py-1 font-sans text-xs font-bold text-black">
+              {n.badge}
+            </span>
+          </div>
+          <div class="flex flex-col gap-1 p-4">
+            <p class="font-sans text-sm font-bold text-title">{n.titulo}</p>
+            <p class="font-sans text-xs text-muted">{n.subtitulo}</p>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</DashboardShell>

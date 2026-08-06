@@ -44,19 +44,19 @@ export const PAISES: Pais[] = [
  */
 export const MENSAJES_CTA: Record<string, string> = {
   quiero_aprender:
-    'Hola, soy {nombre} y escribo desde {pais}. Vi la página de 101 BTC y quiero aprender Bitcoin desde cero. ¿Por dónde empiezo?',
+    'Hola, soy {nombre} y escribo desde {pais}. Vi la página de Bitcoin 101 y quiero aprender Bitcoin desde cero. ¿Por dónde empiezo?',
   empezar_entender:
-    'Hola, soy {nombre} y escribo desde {pais}. Nunca me explicaron cómo funciona el dinero de verdad y quiero empezar a entenderlo. ¿Me orientas con 101 BTC?',
+    'Hola, soy {nombre} y escribo desde {pais}. Nunca me explicaron cómo funciona el dinero de verdad y quiero empezar a entenderlo. ¿Me orientas con Bitcoin 101?',
   plan_basico:
-    'Hola, soy {nombre} desde {pais}. Me interesa el plan BÁSICO de 101 BTC ($47, pago único). ¿Cómo hago para acceder?',
+    'Hola, soy {nombre} desde {pais}. Me interesa el plan BÁSICO de Bitcoin 101 ($47, pago único). ¿Cómo hago para acceder?',
   plan_completo:
-    'Hola, soy {nombre} desde {pais}. Me interesa el plan COMPLETO de 101 BTC ($77, pago único), el que incluye la asesoría mensual. ¿Cuál es el siguiente paso?',
+    'Hola, soy {nombre} desde {pais}. Me interesa el plan COMPLETO de Bitcoin 101 ($77, pago único), el que incluye la asesoría mensual. ¿Cuál es el siguiente paso?',
   plan_mentor:
-    'Hola, soy {nombre} desde {pais}. Quiero información del plan MENTOR 1 a 1 de 101 BTC ($500). ¿Cómo funciona el acompañamiento durante el año?',
+    'Hola, soy {nombre} desde {pais}. Quiero información del plan MENTOR 1 a 1 de Bitcoin 101 ($500). ¿Cómo funciona el acompañamiento durante el año?',
   escribenos:
-    'Hola, soy {nombre} desde {pais}. Leí las preguntas frecuentes de 101 BTC y me quedó una duda que quiero resolver antes de empezar.',
+    'Hola, soy {nombre} desde {pais}. Leí las preguntas frecuentes de Bitcoin 101 y me quedó una duda que quiero resolver antes de empezar.',
   cta_general:
-    'Hola, soy {nombre} y escribo desde {pais}. Llegué desde la página de 101 BTC y quiero más información sobre el curso.',
+    'Hola, soy {nombre} y escribo desde {pais}. Llegué desde la página de Bitcoin 101 y quiero más información sobre el curso.',
 };
 
 export const CTA_FALLBACK = 'cta_general';

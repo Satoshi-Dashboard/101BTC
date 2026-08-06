@@ -1,0 +1,247 @@
+---
+import DashboardShell from '../../components/DashboardShell.astro';
+import { TEMARIO, TODAS_LAS_CLASES } from '../../lib/temario';
+
+export function getStaticPaths() {
+  return TODAS_LAS_CLASES.map((clase, i) => ({
+    params: { slug: clase.slug },
+    props: {
+      clase,
+      modulo: TEMARIO.find((m) => m.clases.some((c) => c.slug === clase.slug)),
+      prev: TODAS_LAS_CLASES[i - 1] ?? null,
+      next: TODAS_LAS_CLASES[i + 1] ?? null,
+    },
+  }));
+}
+
+const { clase, modulo, prev, next } = Astro.props;
+---
+
+<DashboardShell
+  title={`Clase ${clase.numero}. ${clase.titulo} — Bitcoin 101`}
+  active="mis-clases"
+  crumb={[
+    { label: 'Mis clases', href: '/mis-clases' },
+    { label: modulo?.titulo ?? '' },
+    { label: `Clase ${clase.numero}` },
+  ]}
+>
+  <div class="mx-auto max-w-[860px]">
+    <div class="flex items-center justify-between gap-4">
+      <a
+        href="/mis-clases"
+        class="flex w-fit items-center gap-1 font-sans text-sm text-muted transition-colors duration-300 hover:text-title"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Volver a mis clases
+      </a>
+
+      {
+        next ? (
+          <a
+            href={`/clase/${next.slug}`}
+            class="flex w-fit items-center gap-1 font-sans text-sm font-medium text-bitcoin transition-colors duration-300 hover:brightness-110"
+          >
+            Siguiente clase
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+        ) : (
+          <a
+            href="/certificado"
+            class="flex w-fit items-center gap-1 font-sans text-sm font-medium text-bitcoin transition-colors duration-300 hover:brightness-110"
+          >
+            Finalizado. Certificado
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+        )
+      }
+    </div>
+
+    <!-- Video: placeholder, se conecta a contenido real después -->
+    <div class="mt-6 flex aspect-video w-full items-center justify-center rounded-card border border-border bg-bg-card">
+      <div class="flex h-16 w-16 items-center justify-center rounded-full bg-bitcoin/15 text-bitcoin">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </div>
+    </div>
+
+    <div class="mt-6 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+      <div class="flex flex-col gap-2">
+        <p class="font-sans text-xs font-semibold uppercase tracking-[0.24px] text-bitcoin">
+          Módulo {modulo?.numero}. {modulo?.titulo}
+        </p>
+        <h1 class="font-sans text-2xl font-bold text-title sm:text-3xl">
+          Clase {clase.numero}. {clase.titulo}
+        </h1>
+      </div>
+
+      <button
+        type="button"
+        id="clase-check"
+        data-clase-slug={clase.slug}
+        class="flex shrink-0 items-center gap-2 rounded-lg border border-border px-4 py-2.5 font-sans text-sm font-bold text-title transition-colors duration-300 hover:border-bitcoin/40"
+      >
+        <span
+          id="clase-check-icon"
+          class="flex h-4 w-4 items-center justify-center rounded-[4px] border border-border text-transparent transition-colors duration-300"
+        >
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </span>
+        <span id="clase-check-label">Marcar como completada</span>
+      </button>
+    </div>
+
+    <!-- Tabs: Resumen / Recursos -->
+    <div class="mt-8 flex items-center gap-2 border-b border-border">
+      <button
+        type="button"
+        data-clase-tab="resumen"
+        class="js-clase-tab-btn border-b-2 border-bitcoin px-1 pb-3 font-sans text-sm font-semibold text-title"
+      >
+        Resumen
+      </button>
+      <button
+        type="button"
+        data-clase-tab="recursos"
+        class="js-clase-tab-btn border-b-2 border-transparent px-1 pb-3 font-sans text-sm font-semibold text-muted transition-colors duration-300 hover:text-title"
+      >
+        Recursos
+      </button>
+    </div>
+
+    <div data-clase-tab-panel="resumen" class="mt-4">
+      <p class="font-sans text-sm leading-relaxed text-muted">
+        {clase.descripcion ?? 'Resumen de la clase próximamente.'}
+      </p>
+    </div>
+
+    <div data-clase-tab-panel="recursos" class="mt-4" style="display:none;">
+      {
+        clase.recursos && clase.recursos.length > 0 ? (
+          <ul class="flex flex-col gap-2">
+            {clase.recursos.map((r) => (
+              <li>
+                <a
+                  href={r.href}
+                  target={r.href.startsWith('http') ? '_blank' : undefined}
+                  rel={r.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  class="flex w-fit items-center gap-2 font-sans text-sm font-medium text-bitcoin transition-colors duration-300 hover:brightness-110"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M13.5 6.5l4 4L9 19H5v-4z" />
+                    <path d="M12.5 7.5L16.5 3.5a2.828 2.828 0 1 1 4 4L16.5 11.5" />
+                  </svg>
+                  {r.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="font-sans text-sm text-muted">Sin recursos adicionales por ahora.</p>
+        )
+      }
+    </div>
+
+    <!-- Navegación entre clases -->
+    <div class="mt-10 flex items-center justify-between gap-4 border-t border-border pt-6">
+      {
+        prev ? (
+          <a
+            href={`/clase/${prev.slug}`}
+            class="flex items-center gap-2 font-sans text-sm text-muted transition-colors duration-300 hover:text-title"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+            Clase {prev.numero}
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next ? (
+          <a
+            href={`/clase/${next.slug}`}
+            class="flex items-center gap-2 font-sans text-sm font-bold text-bitcoin transition-colors duration-300 hover:brightness-110"
+          >
+            Clase {next.numero}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </div>
+  </div>
+
+  <script>
+    // Tabs Resumen / Recursos
+    const tabBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.js-clase-tab-btn'));
+    tabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.claseTab;
+        tabBtns.forEach((b) => {
+          const active = b === btn;
+          b.classList.toggle('border-bitcoin', active);
+          b.classList.toggle('text-title', active);
+          b.classList.toggle('border-transparent', !active);
+          b.classList.toggle('text-muted', !active);
+        });
+        document.querySelectorAll<HTMLElement>('[data-clase-tab-panel]').forEach((panel) => {
+          panel.style.display = panel.dataset.claseTabPanel === key ? 'block' : 'none';
+        });
+      });
+    });
+
+    // Guarda { [slug]: 'YYYY-MM-DD' } — la fecha alimenta el heatmap de /progreso.
+    const STORAGE_KEY = 'bitcoin101_progreso_v2';
+    const getProgreso = (): Record<string, string> => {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}');
+      } catch {
+        return {};
+      }
+    };
+    const setProgreso = (data: Record<string, string>) => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    };
+
+    const btn = document.getElementById('clase-check');
+    const icon = document.getElementById('clase-check-icon');
+    const label = document.getElementById('clase-check-label');
+    const slug = btn?.dataset.claseSlug ?? '';
+
+    const paint = (checked: boolean) => {
+      icon?.classList.toggle('bg-bitcoin', checked);
+      icon?.classList.toggle('border-bitcoin', checked);
+      icon?.classList.toggle('text-black', checked);
+      icon?.classList.toggle('text-transparent', !checked);
+      if (label) label.textContent = checked ? 'Completada' : 'Marcar como completada';
+    };
+
+    paint(slug in getProgreso());
+
+    btn?.addEventListener('click', () => {
+      const current = getProgreso();
+      const checked = slug in current;
+      if (checked) delete current[slug];
+      else current[slug] = new Date().toISOString().slice(0, 10);
+      setProgreso(current);
+      paint(!checked);
+    });
+  </script>
+</DashboardShell>
